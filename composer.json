@@ -1,0 +1,30 @@
+{
+    "name": "ricardo/aspect-oriented-programming",
+    "description": "This project is an example of using aspect-oriented programming in PHP",
+    "type": "project",
+    "license": "GPL 3.0",
+    "authors": [
+        {
+            "name": "Ricardo Ledo de Tulio",
+            "email": "ledo.tulio@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "goaop/framework": "^2.0",
+        "monolog/monolog": "^1.22"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "AspectOrientedProgramming\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AspectOrientedProgramming\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    composer:
+        image: composer/composer
+        volumes:
+            - ./:/composer/
+        working_dir: /composer/
+
+    phpunit:
+        image: phpunit/phpunit
+        volumes:
+            - ./:/phpunit/
+        working_dir: /phpunit/
