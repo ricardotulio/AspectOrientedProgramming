@@ -10,7 +10,7 @@ This project has three examples of using AOP in PHP:
 
 All implementations of aspects are covered by tests.
 
-# How to run this projecto
+# How to run this project
 
 ## Using Vagrant
 
