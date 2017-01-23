@@ -10,7 +10,6 @@ before_script:
   - composer require satooshi/php-coveralls:* --dev
 script:
   - vendor/bin/phpunit
-  - vendor/bin/behat
   - phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
