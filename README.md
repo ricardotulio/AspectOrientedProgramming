@@ -1,5 +1,6 @@
 # Aspect Oriented Programming in PHP
 
+[![Build Status](https://travis-ci.org/ricardotulio/AspectOrientedProgramming.svg?branch=master)](https://travis-ci.org/ricardotulio/AspectOrientedProgramming)
 [![Coverage Status](https://coveralls.io/repos/github/ricardotulio/AspectOrientedProgramming/badge.svg?branch=master)](https://coveralls.io/github/ricardotulio/AspectOrientedProgramming?branch=master)
 
 The purpose of this project is to demonstrate the use of aspect-oriented programming in PHP using Go!. Go! is a PHP framework that allows us to use aspect-oriented programming using Doctrine Annotations.
