@@ -8,7 +8,7 @@ use Go\Aop\Aspect;
 use Monolog\Logger;
 
 /**
- *  Manages application aspects
+ * Manages application aspects
  *
  * @package  ApplicationAspectKernel\Aspect
  * @author   Ricardo Ledo de Tulio <ledo.tulio@gmail.com>

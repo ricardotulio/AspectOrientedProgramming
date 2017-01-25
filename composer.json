@@ -12,11 +12,11 @@
     "minimum-stability": "stable",
     "require": {
         "goaop/framework": "^2.0",
-        "monolog/monolog": "^1.22",
-        "satooshi/php-coveralls": "^1.0"
+        "monolog/monolog": "^1.22"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7"
+        "phpunit/phpunit": "^5.7",
+        "satooshi/php-coveralls": "^1.0"
     },
     "autoload": {
         "psr-4": {

@@ -11,7 +11,7 @@ use AspectOrientedProgramming\Aspect\Stub\ClassThatThrowsExceptionStub;
 class ExceptionLogAspectTest extends AspectTestCase
 {
     /**
-     * @covers \AspectOrientedProgramming\Aspect\ExceptionLoggerAspect::writeLogExceptions
+     * @covers \AspectOrientedProgramming\Aspect\ExceptionLoggerAspect::writeExceptionLog
      * @expectedException Exception
      */
     public function testIfWriteLogWhenExceptionThrown()

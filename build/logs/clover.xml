@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1485365754">
+  <project timestamp="1485365754">
+    <package name="AspectOrientedProgramming\Aspect">
+      <file name="/home/ricardo/workspace/lab/AspectOrientedProgramming/src/Aspect/ApplicationAspectKernel.php">
+        <class name="ApplicationAspectKernel" namespace="AspectOrientedProgramming\Aspect" fullPackage="ApplicationAspectKernel" package="ApplicationAspectKernel">
+          <metrics complexity="3" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="7" coveredelements="0"/>
+        </class>
+        <line num="37" type="method" name="registerAspect" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="39" type="stmt" count="0"/>
+        <line num="40" type="stmt" count="0"/>
+        <line num="49" type="method" name="configureAop" visibility="protected" complexity="2" crap="6" count="0"/>
+        <line num="51" type="stmt" count="0"/>
+        <line num="52" type="stmt" count="0"/>
+        <line num="54" type="stmt" count="0"/>
+        <metrics loc="55" ncloc="26" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="7" coveredelements="0"/>
+      </file>
+      <file name="/home/ricardo/workspace/lab/AspectOrientedProgramming/src/Aspect/ExceptionLoggerAspect.php">
+        <class name="ExceptionLoggerAspect" namespace="AspectOrientedProgramming\Aspect" fullPackage="AspectOrientedProgramming" package="AspectOrientedProgramming">
+          <metrics complexity="3" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+        </class>
+        <line num="60" type="method" name="writeExceptionLog" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="63" type="stmt" count="1"/>
+        <metrics loc="64" ncloc="30" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+      </file>
+    </package>
+    <metrics files="2" loc="119" ncloc="56" classes="2" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="2" elements="10" coveredelements="3"/>
+  </project>
+</coverage>
