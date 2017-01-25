@@ -1,6 +1,6 @@
 <?php
 
-namespace AspectOrientedProgramming\Aspect;
+namespace Aop\Aspect;
 
 use PHPUnit\Framework\TestCase;
 use Go\Aop\Aspect;

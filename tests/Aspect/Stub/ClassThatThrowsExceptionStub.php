@@ -1,6 +1,6 @@
 <?php
 
-namespace AspectOrientedProgramming\Aspect\Stub;
+namespace Aop\Aspect\Stub;
 
 use Exception;
 

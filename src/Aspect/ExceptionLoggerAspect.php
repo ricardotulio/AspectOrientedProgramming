@@ -1,6 +1,6 @@
 <?php
 
-namespace AspectOrientedProgramming\Aspect;
+namespace Aop\Aspect;
 
 use Go\Aop\Aspect;
 use Go\Lang\Annotation\AfterThrowing;
@@ -10,10 +10,10 @@ use Psr\Log\LoggerInterface;
 /**
  * Capture and log runtime exceptions
  *
- * @package  AspectOrientedProgramming\Aspect
+ * @package  Aop\Aspect
  * @author   Ricardo Ledo de Tulio <ledo.tulio@gmail.com>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL 3.0
- * @link     https://github.com/ricardotulio/AspectOrientedProgramming
+ * @link     https://github.com/ricardotulio/Aop
  */
 class ExceptionLoggerAspect implements Aspect
 {
@@ -28,7 +28,7 @@ class ExceptionLoggerAspect implements Aspect
      * Set logger object
      *
      * @param \Psr\Logger\LoggerInterface $logger Logger class
-     * @return AspectOrientedProgramming\Aspect\ExceptionLogAspect
+     * @return \Aop\Aspect\ExceptionLogAspect
      * @codeCoverageIgnore
      */
     public function withLogger(LoggerInterface $logger)
@@ -51,7 +51,7 @@ class ExceptionLoggerAspect implements Aspect
     /**
      * Capture and log exceptions
      *
-     * @param Go\Aop\Intercept\MethodInvocation
+     * @param \Go\Aop\Intercept\MethodInvocation
      *
      * @return null
      *

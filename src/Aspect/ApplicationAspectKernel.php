@@ -1,6 +1,6 @@
 <?php
 
-namespace AspectOrientedProgramming\Aspect;
+namespace Aop\Aspect;
 
 use Go\Core\AspectKernel;
 use Go\Core\AspectContainer;
@@ -13,7 +13,7 @@ use Monolog\Logger;
  * @package  ApplicationAspectKernel\Aspect
  * @author   Ricardo Ledo de Tulio <ledo.tulio@gmail.com>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL 3.0
- * @link     https://github.com/ricardotulio/AspectOrientedProgramming
+ * @link     https://github.com/ricardotulio/Aop
  *
  * @method null registerAspect(Go\Aop\Aspect $aspect)
  * @method null configureAop(Go\Core\AspectContainer $aspect)

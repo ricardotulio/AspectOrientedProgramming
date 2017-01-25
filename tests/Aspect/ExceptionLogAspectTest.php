@@ -1,17 +1,17 @@
 <?php
 
-namespace AspectOrientedProgramming\Aspect;
+namespace Aop\Aspect;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Go\Core\AspectKernel;
 use Go\Core\AspectContainer;
-use AspectOrientedProgramming\Aspect\Stub\ClassThatThrowsExceptionStub;
+use Aop\Aspect\Stub\ClassThatThrowsExceptionStub;
 
 class ExceptionLogAspectTest extends AspectTestCase
 {
     /**
-     * @covers \AspectOrientedProgramming\Aspect\ExceptionLoggerAspect::writeExceptionLog
+     * @covers \Aop\Aspect\ExceptionLoggerAspect::writeExceptionLog
      * @expectedException Exception
      */
     public function testIfWriteLogWhenExceptionThrown()

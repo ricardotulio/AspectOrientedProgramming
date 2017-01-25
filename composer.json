@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AspectOrientedProgramming\\": "src/"
+            "Aop\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AspectOrientedProgramming\\": "tests/"
+            "Aop\\": "tests/"
         }
     }
 }
