@@ -12,7 +12,8 @@
     "minimum-stability": "stable",
     "require": {
         "goaop/framework": "^2.0",
-        "monolog/monolog": "^1.22"
+        "monolog/monolog": "^1.22",
+        "satooshi/php-coveralls": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"

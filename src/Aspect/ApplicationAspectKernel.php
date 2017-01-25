@@ -8,12 +8,32 @@ use Go\Aop\Aspect;
 use Monolog\Logger;
 
 /**
- * Application Aspect Kernel
+ *  Manages application aspects
+ *
+ * @package  ApplicationAspectKernel\Aspect
+ * @author   Ricardo Ledo de Tulio <ledo.tulio@gmail.com>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL 3.0
+ * @link     https://github.com/ricardotulio/AspectOrientedProgramming
+ *
+ * @method null registerAspect(Go\Aop\Aspect $aspect)
+ * @method null configureAop(Go\Core\AspectContainer $aspect)
  */
 class ApplicationAspectKernel extends AspectKernel
 {
+
+    /**
+     *
+     * @var array
+     */
     protected $aspects = array();
 
+    /**
+     * Register an aspect
+     *
+     * @param \Go\Aop\Aspect $aspect Aspect to be registered
+     *
+     * @return null
+     */
     public function registerAspect(Aspect $aspect)
     {
         array_push($this->aspects, $aspect);
@@ -22,14 +42,13 @@ class ApplicationAspectKernel extends AspectKernel
     /**
      * Configure an AspectKernel with advisors, aspects and pointcuts
      *
-     * @param AspectContainer $container Aspect kernel dependency injection container
+     * @param \Go\Aop\AspectContainer $container Aspect DI container
      *
-     * @return void
+     * @return null
      */
     protected function configureAop(AspectContainer $container)
     {
-        foreach($this->aspects as $aspect)
-        {
+        foreach ($this->aspects as $aspect) {
             $container->registerAspect($aspect);
         }
     }
