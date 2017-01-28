@@ -15,17 +15,41 @@ use Monolog\Logger;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL 3.0
  * @link     https://github.com/ricardotulio/Aop
  *
- * @method null registerAspect(Go\Aop\Aspect $aspect)
- * @method null configureAop(Go\Core\AspectContainer $aspect)
+ * @method void setAspectCollection(\Aop\Aspect\AspectCollectionInterface
+ * @method \Aop\Aspect\AspectCollectionInterface getAspectCollection
+ * @method void registerAspect(\Go\Aop\Aspect $aspect)
+ * @method void configureAop(\Go\Core\AspectContainer $aspect)
  */
-class ApplicationAspectKernel extends AspectKernel
+final class ApplicationAspectKernel extends AspectKernel
 {
 
     /**
      *
-     * @var array
+     * @var \Aop\Aspect\AspectCollectionInterface
      */
-    protected $aspects = array();
+    private $aspectCollection;
+
+    /**
+     * Set aspect collection object
+     *
+     * @param \Aop\Aspect\AspectCollectionInterface
+     *
+     * @return null
+     */
+    public function setAspectCollection(AspectCollectionInterface $aspectCollection)
+    {
+        $this->aspectCollection = $aspectCollection;
+    }
+
+    /**
+     * Get aspect collection object
+     *
+     * @return \Aop\Aspect\AspectCollectionInterface
+     */
+    public function getAspectCollection(): ?AspectCollectionInterface
+    {
+        return $this->aspectCollection;
+    }
 
     /**
      * Register an aspect
@@ -36,7 +60,7 @@ class ApplicationAspectKernel extends AspectKernel
      */
     public function registerAspect(Aspect $aspect)
     {
-        array_push($this->aspects, $aspect);
+        $this->getAspectCollection()->add($aspect);
     }
 
     /**
@@ -45,10 +69,12 @@ class ApplicationAspectKernel extends AspectKernel
      * @param \Go\Aop\AspectContainer $container Aspect DI container
      *
      * @return null
+     *
+     * @codeCoverageIgnore
      */
     protected function configureAop(AspectContainer $container)
     {
-        foreach ($this->aspects as $aspect) {
+        foreach ($this->getAspectCollection() as $aspect) {
             $container->registerAspect($aspect);
         }
     }

@@ -1,6 +1,12 @@
 version: '2'
 
 services:
+    php:
+        image: php:7.1-cli
+        volumes:
+            - ./:/php/
+        working_dir: /php/
+
     composer:
         image: composer/composer
         volumes:

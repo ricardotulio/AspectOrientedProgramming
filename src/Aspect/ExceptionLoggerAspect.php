@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL 3.0
  * @link     https://github.com/ricardotulio/Aop
  */
-class ExceptionLoggerAspect implements Aspect
+final class ExceptionLoggerAspect implements Aspect
 {
 
     /**

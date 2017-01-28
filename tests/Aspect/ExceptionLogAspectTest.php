@@ -8,7 +8,7 @@ use Go\Core\AspectKernel;
 use Go\Core\AspectContainer;
 use Aop\Aspect\Stub\ClassThatThrowsExceptionStub;
 
-class ExceptionLogAspectTest extends AspectTestCase
+class ExceptionLogAspectTest extends TestCase
 {
     /**
      * @covers \Aop\Aspect\ExceptionLoggerAspect::writeExceptionLog
@@ -16,14 +16,26 @@ class ExceptionLogAspectTest extends AspectTestCase
      */
     public function testIfWriteLogWhenExceptionThrown()
     {
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
             ->getMock();
 
         $aspect = new ExceptionLoggerAspect();
         $aspect->withLogger($logger);
 
-        $this->registerAspect($aspect);
-        $this->init();
+        $aspectCollection = new AspectCollection();
+        $aspectCollection->add($aspect);
+
+        $aspectKernel = ApplicationAspectKernel::getInstance();
+        $aspectKernel->setAspectCollection($aspectCollection);
+        $aspectKernel->init(
+            array(
+                'debug'     => true,
+                'cacheDir'  => '/tmp/',
+                'includePaths' => array(
+                    realpath(dirname(__FILE__) . '/Stub')
+                )
+            )
+        );
 
         $exceptionMessage = "An any exception";
 
