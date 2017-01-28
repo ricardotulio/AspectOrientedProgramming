@@ -57,7 +57,7 @@ final class AspectCollection implements AspectCollectionInterface
         $removedItem = $this->collection[$offset];
 
         for ($i = $offset; $i < count($this->collection); $i++) {
-            $this->collection[$i] = $this->collection[$i + 1];
+            $this->collection[$i] = $this->get($i + 1);
         }
 
         unset($this->collection[--$this->current]);
