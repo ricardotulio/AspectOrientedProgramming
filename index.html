@@ -1,0 +1,382 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<p>Programação</p>
+					<h1>Orientada à <i>Aspectos</i></h1>
+					<p>em PHP</p>
+				</section>
+				<section>
+					<img width="350px" src="https://avatars1.githubusercontent.com/u/5113666?v=3&u=fcca338232249289bccd81169d467c7d36aca08d&s=400">
+					<p>Ricardo Ledo de Tulio</p>
+					<p><b>@LedoTuli</b></p>
+					<p>Desenvolvedor PHP</p>
+				</section>
+				<section>
+					<h2>o que é programação orientada à <span class="highlight">aspectos</span>?</h2>
+				</section>
+				<section>
+					<h2>tá... mas o que isso significa?</h2>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					```php
+					public function createNewProduct($productName, $price)
+					{
+						$product = new Product();
+						$product->setName($productName);
+						$product->setPrice($price);
+
+						$this->entityManager->persist($product);
+						$this->entityManager->flush();
+					}
+					```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					```php
+					public function createNewProduct($productName, $price)
+					{
+						if(!$this->security->isGranted('ROLE_ADMIN')) {
+							throw new AccessDeniedException();
+						}
+
+						$product = new Product();
+						$product->setName($productName);
+						$product->setPrice($price);
+
+						$this->entityManager->persist($product);
+						$this->entityManager->flush();
+					}
+					```
+					</script>
+				</section>				
+				<section data-markdown>
+					<script type="text/template">
+					```php
+					public function createNewProduct($productName, $price)
+					{
+						if(!$this->security->isGranted('ROLE_ADMIN')) {
+							throw new AccessDeniedException();
+						}
+
+						try {
+							$product = new Product();
+							$product->setName($productName);
+							$product->setPrice($price);
+
+							$this->entityManager->persist($product);
+							$this->entityManager->flush();
+						} catch(PDOException $e) {
+							$this->log->error($e->getMessage());
+							throw $e;
+						}
+					}
+					```
+					</script>
+				</section>
+				<section>
+					<p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
+				</section>		
+				<section>
+					<p>em programação orientada à aspectos, chamamos esse código de <span class="highlight">código de interesse compartilhado</span>
+				</section>
+				<section>
+					<h2>aspecto</h2>
+					<p>é aquilo que faz parte da aparência ou face exterior de algo ou alguém</p>
+				</section>				
+				<section>
+					<h2>Exemplos:</h2>
+					<ul>
+						<li>log</li>
+						<li>cache</li>
+						<li>gerenciamento de <i>transactions</i></li>
+						<li>injeção de dependências</li>
+						<li>autorização</li>
+					</ul>
+				</section>
+				<section>
+					<h2>joinpoints</h2>
+					<p>são partes da minha aplicação que possuem algum aspecto</p>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					```php
+					// createNewProduct é um joinpoint que possui o
+					// aspecto "autorização"
+					public function createNewProduct($productName, $price)
+					{
+						if(!$this->security->isGranted('ROLE_ADMIN')) {
+							throw new AccessDeniedException();
+						}
+
+						$product = new Product();
+						$product->setName($productName);
+						$product->setPrice($price);
+
+						$this->entityManager->persist($product);
+						$this->entityManager->flush();
+					}
+					```
+					</script>
+				</section>
+				<section>
+					<h2>pointcuts</h2>
+					<p>são expressões que identificam os joinpoints</p>
+				</section>
+				<section>
+					<h2>pointcuts</h2>
+					<p>podemos usar namespaces, classes e expressões regulares para identificar os <span class="highlight">joinpoints</span></p>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					execution(public ProductRepository->persist(*))
+					```php
+					/**
+					 * @Before("execution(public ProductRepository->persist(*))")
+					 */
+					public function startTransaction(MethodInvocation $invocation)
+					{
+						$this->entityManager->beginTransaction();
+					}
+					```
+					</script>
+				</section>		
+				<section>
+					<h2>advices</h2>
+					<p>são fragmentos de código que contém o comportamento de um aspecto</p>
+				</section>		
+				<section data-markdown>
+					<script type="text/template">
+					```php
+					public function startTransaction(MethodInvocation $invocation)
+					{
+						$this->entityManager->beginTransaction();
+					}
+					```
+					</script>
+				</section>
+				<section>
+					<h2>Go! Aop</h2>
+					<p>é um framework que nos permite fazer uso da programação orientada à aspectos em PHP</p>
+					<br />				
+					<small><a href="https://github.com/goaop/framework">https://github.com/goaop/framework</a></small>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					## instalando o Go! Aop
+					```
+					$ composer require goaop/framework
+					```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					## implementando nosso AspectKernel
+					```
+					// src/Aspect/ApplicationAspectKernel.php
+
+					namespace Aop\Aspect;
+
+					use Go\Core\AspectKernel;
+					use Go\Core\AspectContainer;
+					
+					final class ApplicationAspectKernel extends AspectKernel
+					{
+					    protected function configureAop(AspectContainer $container)
+					    {}
+					}
+					```
+					</script>
+				</section>				
+				<section data-markdown>
+					<script type="text/template">
+					## inicializando o Go! Aop
+					```php
+					// src/bootstrap.php
+
+					use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
+					
+					require_once '../vendor/autoload.php';
+
+					$aspectKernel = ApplicationAspectKernel::getInstance();
+					$aspectKernel->init(
+					    [
+					        'debug'        => true,
+					        'cacheDir'     => '../cache/',
+					        'includePaths' => [
+					            './'
+					        ]
+					    ]
+					);
+					```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					## criando nosso aspecto
+					```php
+					// src/Aspect/ExceptionLogAspect.php
+
+					namespace Aop\Aspect;
+
+					use Go\Aop\Aspect;
+					use Go\Lang\Annotation\AfterThrowing;
+					use Go\Aop\Intercept\MethodInvocation;
+					use Psr\Log\LoggerInterface;
+
+					final class ExceptionLoggerAspect implements Aspect
+					{
+						// getters and setters
+
+						/*
+					     * @AfterThrowing("execution(public **->*(*))")
+					     */
+					    public function writeExceptionLog(MethodInvocation $invocation)
+					    {
+					        $this->getLogger()->error('An any exception');
+					    }
+					}
+					```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					## registrando nosso aspecto
+					```php
+					protected function configureAop(AspectContainer $container)
+					{
+						$logger = new Logger('errorLog');
+						$logger->pushHandler(
+							new StreamHandler(
+								'../log/error.log', 
+								Logger::ERROR
+							)
+						);
+
+						$exceptionLoggerAspect = new ExceptionLoggerAspect();
+						$exceptionLoggerAspect->withLogger($logger);
+
+						$container->registerAspect($exceptionLoggerAspect);
+					}
+					```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					## testando o funcionamento do aspecto
+					```php
+					// tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+
+					namespace Aop\Aspect\Stub;
+
+					class ClassThatThrowsExceptionStub
+					{
+					    public function throwException($message)
+					    {
+					        throw new \Exception($message);
+					    }
+					}
+					```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					## testando o funcionamento do aspecto
+					```php
+					/**
+					 * @expectedException Exception
+					 */
+					public function testIfWriteLogWhenExceptionThrown()
+					{
+					    $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+					        ->getMock();
+
+					    $aspect = new ExceptionLoggerAspect();
+					    $aspect->withLogger($logger);
+
+					    $aspectCollection = new AspectCollection();
+					    $aspectCollection->add($aspect);
+
+					    $aspectKernel = ApplicationAspectKernel::getInstance();
+					    $aspectKernel->setAspectCollection($aspectCollection);
+					    $aspectKernel->init(
+					        array(
+					            'debug'     => true,
+					            'cacheDir'  => '/tmp/',
+					            'includePaths' => array(
+					                realpath(dirname(__FILE__) . '/Stub')
+					            )
+					        )
+					    );
+
+					    $exceptionMessage = "An any exception";
+
+					    $logger->expects($this->once())
+					        ->method('error')
+					        ->with($exceptionMessage);
+
+					    $stub = new ClassThatThrowsExceptionStub();
+					    $stub->throwException($exceptionMessage);
+					}
+					```
+					</script>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+		<style type="text/css">
+			h2, h3, h4, h5 {
+				text-transform: none !important;
+			}
+
+			.highlight {
+				font-style: italic !important;
+				color: #36c !important;
+			}
+		</style>
+	</body>
+</html>
+
+
