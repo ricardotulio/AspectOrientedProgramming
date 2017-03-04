@@ -30,322 +30,625 @@
 					<p>em PHP</p>
 				</section>
 				<section>
-					<img width="350px" src="https://avatars1.githubusercontent.com/u/5113666?v=3&u=fcca338232249289bccd81169d467c7d36aca08d&s=400">
-					<p>Ricardo Ledo de Tulio</p>
-					<p><b>@LedoTuli</b></p>
-					<p>Desenvolvedor PHP</p>
-				</section>
-				<section>
-					<h2>o que é programação orientada à <span class="highlight">aspectos</span>?</h2>
-				</section>
-				<section>
-					<h2>tá... mas o que isso significa?</h2>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					```php
-					public function createNewProduct($productName, $price)
-					{
-						$product = new Product();
-						$product->setName($productName);
-						$product->setPrice($price);
-
-						$this->entityManager->persist($product);
-						$this->entityManager->flush();
-					}
-					```
-					</script>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					```php
-					public function createNewProduct($productName, $price)
-					{
-						if(!$this->security->isGranted('ROLE_ADMIN')) {
-							throw new AccessDeniedException();
-						}
-
-						$product = new Product();
-						$product->setName($productName);
-						$product->setPrice($price);
-
-						$this->entityManager->persist($product);
-						$this->entityManager->flush();
-					}
-					```
-					</script>
-				</section>				
-				<section data-markdown>
-					<script type="text/template">
-					```php
-					public function createNewProduct($productName, $price)
-					{
-						if(!$this->security->isGranted('ROLE_ADMIN')) {
-							throw new AccessDeniedException();
-						}
-
-						try {
+					<section>
+						<h2>o que é programação orientada à <span class="highlight">aspectos</span>?</h2>
+					</section>
+					<section>
+						<h2>tá... mas o que isso significa?</h2>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						public function createNewProduct($productName, $price)
+						{
 							$product = new Product();
 							$product->setName($productName);
 							$product->setPrice($price);
 
 							$this->entityManager->persist($product);
-							$this->entityManager->flush();
-						} catch(PDOException $e) {
-							$this->log->error($e->getMessage());
-							throw $e;
 						}
-					}
-					```
-					</script>
-				</section>
-				<section>
-					<p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
-				</section>		
-				<section>
-					<p>em programação orientada à aspectos, chamamos esse código de <span class="highlight">código de interesse compartilhado</span>
-				</section>
-				<section>
-					<h2>aspecto</h2>
-					<p>é aquilo que faz parte da aparência ou face exterior de algo ou alguém</p>
-				</section>				
-				<section>
-					<h2>Exemplos:</h2>
-					<ul>
-						<li>log</li>
-						<li>cache</li>
-						<li>gerenciamento de <i>transactions</i></li>
-						<li>injeção de dependências</li>
-						<li>autorização</li>
-					</ul>
-				</section>
-				<section>
-					<h2>joinpoints</h2>
-					<p>são partes da minha aplicação que possuem algum aspecto</p>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					```php
-					// createNewProduct é um joinpoint que possui o
-					// aspecto "autorização"
-					public function createNewProduct($productName, $price)
-					{
-						if(!$this->security->isGranted('ROLE_ADMIN')) {
-							throw new AccessDeniedException();
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						public function createNewProduct($productName, $price)
+						{
+							$product = new Product();
+							$product->setName($productName);
+							$product->setPrice($price);
+
+							$this->entityManager->beginTransaction();
+							$this->entityManager->persist($product);
+							$this->entityManager->commit();
 						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						public function createNewProduct($productName, $price)
+						{
+							if(!$this->security->isGranted('ROLE_ADMIN')) {
+								throw new AccessDeniedException();
+							}
 
-						$product = new Product();
-						$product->setName($productName);
-						$product->setPrice($price);
+							$product = new Product();
+							$product->setName($productName);
+							$product->setPrice($price);
 
-						$this->entityManager->persist($product);
-						$this->entityManager->flush();
-					}
-					```
-					</script>
+							$this->entityManager->beginTransaction();
+							$this->entityManager->persist($product);
+							$this->entityManager->commit();
+						}
+						```
+						</script>
+					</section>				
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						public function createNewProduct($productName, $price)
+						{
+							if(!$this->security->isGranted('ROLE_ADMIN')) {
+								throw new AccessDeniedException();
+							}
+
+							try {
+								$product = new Product();
+								$product->setName($productName);
+								$product->setPrice($price);
+
+								$this->entityManager->beginTransaction();
+								$this->entityManager->persist($product);
+								$this->entityManager->commit();
+							} catch(PDOException $e) {
+								$this->log->error($e->getMessage());
+								throw $e;
+							}
+						}
+						```
+						</script>
+					</section>
+					<section>
+						<p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
+					</section>	
+				</section>	
+
+				<section>
+					<section>
+						<p>em programação orientada à aspectos, chamamos esse código de <span class="highlight">código de interesse compartilhado</span>
+					</section>
+					<section>
+						<h2>aspecto</h2>
+						<p>é aquilo que faz parte da aparência ou face exterior de algo ou alguém</p>
+					</section>				
+					<section>
+						<h2>Exemplos:</h2>
+						<ul>
+							<li>log</li>
+							<li>cache</li>
+							<li>gerenciamento de <i>transactions</i></li>
+							<li>injeção de dependências</li>
+							<li>autorização</li>
+						</ul>
+					</section>
+					<section>
+						<h2>joinpoints</h2>
+						<p>são partes da minha aplicação que possuem algum aspecto</p>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						// createNewProduct é um joinpoint que possui o
+						// aspecto "autorização"
+						public function createNewProduct($productName, $price)
+						{
+							if(!$this->security->isGranted('ROLE_ADMIN')) {
+								throw new AccessDeniedException();
+							}
+
+							$product = new Product();
+							$product->setName($productName);
+							$product->setPrice($price);
+
+							$this->entityManager->persist($product);
+						}
+						```
+						</script>
+					</section>
+					<section>
+						<h2>pointcuts</h2>
+						<p>são expressões que identificam os joinpoints</p>
+					</section>
+					<section>
+						<h2>pointcuts</h2>
+						<p>podemos usar namespaces, classes e expressões regulares para identificar os <span class="highlight">joinpoints</span></p>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						execution(public ProductRepository->persist(*))
+						```php
+						/**
+						 * @Before("execution(public ProductRepository->persist(*))")
+						 */
+						public function startTransaction(MethodInvocation $invocation)
+						{
+							$this->entityManager->beginTransaction();
+						}
+						```
+						</script>
+					</section>		
+					<section>
+						<h2>advices</h2>
+						<p>são fragmentos de código que contém o comportamento de um aspecto</p>
+					</section>		
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						public function startTransaction(MethodInvocation $invocation)
+						{
+							$this->entityManager->beginTransaction();
+						}
+						```
+						</script>
+					</section>
 				</section>
 				<section>
-					<h2>pointcuts</h2>
-					<p>são expressões que identificam os joinpoints</p>
-				</section>
-				<section>
-					<h2>pointcuts</h2>
-					<p>podemos usar namespaces, classes e expressões regulares para identificar os <span class="highlight">joinpoints</span></p>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					execution(public ProductRepository->persist(*))
-					```php
-					/**
-					 * @Before("execution(public ProductRepository->persist(*))")
-					 */
-					public function startTransaction(MethodInvocation $invocation)
-					{
-						$this->entityManager->beginTransaction();
-					}
-					```
-					</script>
-				</section>		
-				<section>
-					<h2>advices</h2>
-					<p>são fragmentos de código que contém o comportamento de um aspecto</p>
-				</section>		
-				<section data-markdown>
-					<script type="text/template">
-					```php
-					public function startTransaction(MethodInvocation $invocation)
-					{
-						$this->entityManager->beginTransaction();
-					}
-					```
-					</script>
-				</section>
-				<section>
-					<h2>Go! Aop</h2>
-					<p>é um framework que nos permite fazer uso da programação orientada à aspectos em PHP</p>
-					<br />				
-					<small><a href="https://github.com/goaop/framework">https://github.com/goaop/framework</a></small>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					## instalando o Go! Aop
-					```
-					$ composer require goaop/framework
-					```
-					</script>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					## implementando nosso AspectKernel
-					```
-					// src/Aspect/ApplicationAspectKernel.php
+					<section>
+						<h2>Go! Aop</h2>
+						<p>é um framework que nos permite fazer uso da programação orientada à aspectos em PHP</p>
+						<br />				
+						<small><a href="https://github.com/goaop/framework">https://github.com/goaop/framework</a></small>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## instalando o Go! Aop
+						```
+						$ composer require goaop/framework
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## implementando nosso AspectKernel
+						```
+						// src/Aspect/ApplicationAspectKernel.php
 
-					namespace Aop\Aspect;
+						namespace Aop\Aspect;
 
-					use Go\Core\AspectKernel;
-					use Go\Core\AspectContainer;
-					
-					final class ApplicationAspectKernel extends AspectKernel
-					{
-					    protected function configureAop(AspectContainer $container)
-					    {}
-					}
-					```
-					</script>
-				</section>				
-				<section data-markdown>
-					<script type="text/template">
-					## inicializando o Go! Aop
-					```php
-					// src/bootstrap.php
+						use Go\Core\AspectKernel;
+						use Go\Core\AspectContainer;
+						
+						final class ApplicationAspectKernel extends AspectKernel
+						{
+						    protected function configureAop(AspectContainer $container)
+						    {}
+						}
+						```
+						</script>
+					</section>				
+					<section data-markdown>
+						<script type="text/template">
+						## inicializando o Go! Aop
+						```php
+						// src/bootstrap.php
 
-					use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
-					
-					require_once '../vendor/autoload.php';
+						use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
+						
+						require_once '../vendor/autoload.php';
 
-					$aspectKernel = ApplicationAspectKernel::getInstance();
-					$aspectKernel->init(
-					    [
-					        'debug'        => true,
-					        'cacheDir'     => '../cache/',
-					        'includePaths' => [
-					            './'
-					        ]
-					    ]
-					);
-					```
-					</script>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					## criando nosso aspecto
-					```php
-					// src/Aspect/ExceptionLogAspect.php
-
-					namespace Aop\Aspect;
-
-					use Go\Aop\Aspect;
-					use Go\Lang\Annotation\AfterThrowing;
-					use Go\Aop\Intercept\MethodInvocation;
-					use Psr\Log\LoggerInterface;
-
-					final class ExceptionLoggerAspect implements Aspect
-					{
-						// getters and setters
-
-						/*
-					     * @AfterThrowing("execution(public **->*(*))")
-					     */
-					    public function writeExceptionLog(MethodInvocation $invocation)
-					    {
-					        $this->getLogger()->error('An any exception');
-					    }
-					}
-					```
-					</script>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-					## registrando nosso aspecto
-					```php
-					protected function configureAop(AspectContainer $container)
-					{
-						$logger = new Logger('errorLog');
-						$logger->pushHandler(
-							new StreamHandler(
-								'../log/error.log', 
-								Logger::ERROR
-							)
+						$aspectKernel = ApplicationAspectKernel::getInstance();
+						$aspectKernel->init(
+						    [
+						        'debug'        => true,
+						        'cacheDir'     => '../cache/',
+						        'includePaths' => [
+						            './'
+						        ]
+						    ]
 						);
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## criando nosso aspecto
+						```php
+						// src/Aspect/ExceptionLogAspect.php
 
-						$exceptionLoggerAspect = new ExceptionLoggerAspect();
-						$exceptionLoggerAspect->withLogger($logger);
+						namespace Aop\Aspect;
 
-						$container->registerAspect($exceptionLoggerAspect);
-					}
-					```
-					</script>
+						use Go\Aop\Aspect;
+						use Go\Lang\Annotation\AfterThrowing;
+						use Go\Aop\Intercept\MethodInvocation;
+						use Psr\Log\LoggerInterface;
+
+						final class ExceptionLoggerAspect implements Aspect
+						{
+							/*
+						     * @AfterThrowing("execution(public **->*(*))")
+						     */
+						    public function writeExceptionLog(MethodInvocation $invocation)
+						    {
+						        $this->getLogger()->error('An any exception');
+						    }
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## registrando nosso aspecto
+						```php
+						protected function configureAop(AspectContainer $container)
+						{
+							$logger = new Logger('errorLog');
+							$logger->pushHandler(
+								new StreamHandler(
+									'../log/error.log', 
+									Logger::ERROR
+								)
+							);
+
+							$exceptionLoggerAspect = new ExceptionLoggerAspect();
+							$exceptionLoggerAspect->withLogger($logger);
+
+							$container->registerAspect($exceptionLoggerAspect);
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## testando o funcionamento do nosso aspecto
+						```php
+						class ExceptionThrowerClass 
+						{
+							public function throwException()
+							{
+								throw new Exception('my exception');
+							}
+						}
+
+						$throwerClass = new ExceptionThrowerClass();
+						$throwerClass->throwException();
+						```
+						</script>
+					</section>
 				</section>
-				<section data-markdown>
-					<script type="text/template">
-					## testando o funcionamento do aspecto
-					```php
-					// tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
-
-					namespace Aop\Aspect\Stub;
-
-					class ClassThatThrowsExceptionStub
-					{
-					    public function throwException($message)
-					    {
-					        throw new \Exception($message);
-					    }
-					}
-					```
-					</script>
+				<section>
+					<section>
+						<h2>referência de <i>pointcuts</i> e <i>advices</i></h2>
+					</section>
+					<section>
+						<h2>execution(public Example->method(*))</h2>
+						<p>infere um comportamento toda vez que o método <i>method</i> da classe <i>Example</i> for executado</p>
+					</section>
+					<section>
+						<h2>execution(public Example->method|method2(*))</h2>
+						<p>infere um comportamento toda vez que o método <i>method</i> ou o método <i>method2</i> da classe <i>Example</i> for executado</p>
+					</section>	
+					<section>
+						<h2>access(public Example->attribute)</h2>
+						<p>infere um comportamento toda vez que o atributo <i>attribute</i> da classe <i>Example</i> for acessado</p>
+					</section>													
+					<section>
+						<h2>initialization(Demo\**)</h2>
+						<p>infere um comportamento toda vez que for criada uma instância de uma classe que pertença ao namespace <i>Demo</i></p>
+					</section>
+					<section>
+						<h2>@execution(My\Annotation)</h2>
+						<p>infere um comportamento toda vez que um método anotado com <i>@My\Annotation</i> for executado</p>
+					</section>
+					<section>
+						<h2>@access(My\Annotation)</h2>
+						<p>infere um comportamento toda vez que um atributo anotado com <i>@My\Annotation</i> for acessado</p>
+					</section>									
+					<section>
+						<h2>@Before</h2>
+						<p>permite interceptar a execução de um método e inferir um comportamento antes que ele ocorrer</p>
+					</section>
+					<section>
+						<h2>@After</h2>
+						<p>permite interceptar a execução de um método e inferir um comportamento depois que ele ocorrer</p>
+					</section>
+					<section>
+						<h2>@AfterThrowing</h2>
+						<p>permite interceptar o lançamento de uma exceção e inferir um comportamento depois que ela for lançada</p>
+					</section>										
 				</section>
-				<section data-markdown>
-					<script type="text/template">
-					## testando o funcionamento do aspecto
-					```php
-					/**
-					 * @expectedException Exception
-					 */
-					public function testIfWriteLogWhenExceptionThrown()
-					{
-					    $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
-					        ->getMock();
+				<section>
+					<section>
+						<h2>refatorando nosso código que persiste produtos</h2>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						criando nosso aspecto para gerenciar *transactions*
+						```php
+						// src/Aspect/ExceptionLogAspect.php
 
-					    $aspect = new ExceptionLoggerAspect();
-					    $aspect->withLogger($logger);
+						namespace Aop\Aspect;
 
-					    $aspectCollection = new AspectCollection();
-					    $aspectCollection->add($aspect);
+						use Go\Aop\Aspect;
+						use Go\Lang\Annotation\AfterThrowing;
+						use Go\Aop\Intercept\MethodInvocation;
 
-					    $aspectKernel = ApplicationAspectKernel::getInstance();
-					    $aspectKernel->setAspectCollection($aspectCollection);
-					    $aspectKernel->init(
-					        array(
-					            'debug'     => true,
-					            'cacheDir'  => '/tmp/',
-					            'includePaths' => array(
-					                realpath(dirname(__FILE__) . '/Stub')
-					            )
-					        )
-					    );
+						final class TransactionManagerAspect implements Aspect
+						{
+						    // ...
+						}
+						```
+						</script>
+					</section>					
+					<section data-markdown>
+						<script type="text/template">
+						sempre que um método que possuir a annotation @Transactional for executado nós iremos iniciar uma *transaction*
+						```php
+						final class TransactionManagerAspect implements Aspect
+						{
+							/*
+						     * @Before("@execution(Annotation\Transactional)")
+						     */
+						    public function beginTransaction(MethodInvocation $invocation)
+						    {
+						    	$this->entityManager->beginTransaction();
+						    }
 
-					    $exceptionMessage = "An any exception";
+						    // ...
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						e após a execução do método iremos commitar a *transaction*
+						```php
+						final class TransactionManagerAspect implements Aspect
+						{
+							// ...
 
-					    $logger->expects($this->once())
-					        ->method('error')
-					        ->with($exceptionMessage);
+							/*
+						     * @After("@execution(Annotation\Transactional)")
+						     */
+						    public function commitTransaction(MethodInvocation $invocation)
+						    {
+						    	$this->entityManager->commit();
+						    }
 
-					    $stub = new ClassThatThrowsExceptionStub();
-					    $stub->throwException($exceptionMessage);
-					}
-					```
-					</script>
+						    // ...
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						também vamos executar um *rollback* caso alguma exceção seja lançada
+						```php
+						final class TransactionManagerAspect implements Aspect
+						{
+						    // ...
+
+							/*
+						     * @AfterThrow("execution(public **->*(*))")
+						     */
+						    public function commitTransaction(MethodInvocation $invocation)
+						    {
+						    	$this->entityManager->rollBack();
+						    }
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						também vamos criar uma classe que irá conter o aspecto de autorização
+						```php
+						// src/Aspect/AuthorizeAspect.php
+						
+						use Go\Aop\Aspect;
+						use Go\Lang\Annotation\AfterThrowing;
+						use Go\Aop\Intercept\MethodInvocation;
+
+						final class AuthorizationAspect implements Aspect
+						{
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						e toda vez que qualquer método público for executado, vamos checar as permissões
+						```php
+						final class AuthorizationAspect implements Aspect
+						{
+							/*
+						     * @Before("execution(public **->*(*))")
+						     */
+						    public function authorize(MethodInvocation $invocation)
+						    {
+						    }
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						então o nosso código que verificava a autorização foi encapsulado na classe <span class="highlight">AuthorizeAspect</span>
+
+						```php
+						public function createNewProduct($productName, $price)
+						{
+							// if(!$this->security->isGranted('ROLE_ADMIN')) {
+							//   throw new AccessDeniedException();
+							// }
+
+							// ...
+						}
+						```
+						</script>
+					</section>	
+					<section data-markdown>
+						<script type="text/template">
+						o log de exceções foi encapsulado na classe <span class="highlight">ExceptionLogAspect</span>
+						```php
+						public function createNewProduct($productName, $price)
+						{
+							// ..
+
+							// try {
+							/// ...
+							// } catch(PDOException $e) {
+							//   $this->log->error($e->getMessage());
+							// 	 throw $e;
+							// }
+						}
+						```
+						</script>
+					</section>	
+					<section data-markdown>
+						<script type="text/template">
+						e o gerenciamento de *transactions* foi encapsulado na classe <span class="highlight">TransactionManagerAspect</span>
+						```php
+						public function createNewProduct($productName, $price)
+						{
+							// ..
+
+							//    $this->entityManager->beginTransaction();
+							//    $this->entityManager->persist($product);
+							//    $this->entityManager->commit();
+						}
+						```
+						<small>*precisamos apenas adicionar a annotation <i>@Transactional</i></small>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						e esse é o resultado final :)
+						```php
+						/**
+						 * @Transactional
+						 */
+						public function createNewProduct($productName, $price)
+						{
+							$product = new Product();
+							$product->setName($productName);
+							$product->setPrice($price);
+
+							$this->entityManager->persist($product);
+						}
+						```
+						</script>
+					</section>												
 				</section>
+				<section>
+					<section>
+						<h2>Go! Aop e PHPUnit</h2>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						// tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+
+						namespace Aop\Aspect\Stub;
+
+						class ClassThatThrowsExceptionStub
+						{
+						    public function throwException($message)
+						    {
+						        throw new \Exception($message);
+						    }
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						/**
+						 * @expectedException Exception
+						 */
+						public function testIfWriteLogWhenExceptionThrown()
+						{
+						    $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+						        ->getMock();
+
+						    $aspect = new ExceptionLoggerAspect();
+						    $aspect->withLogger($logger);
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						/**
+						 * @expectedException Exception
+						 */
+						public function testIfWriteLogWhenExceptionThrown()
+						{
+							// ...
+
+							$aspectCollection = new AspectCollection();
+							$aspectCollection->add($aspect);
+
+						    $aspectKernel = ApplicationAspectKernel::getInstance();
+						    $aspectKernel->setAspectCollection($aspectCollection);
+						    $aspectKernel->init(
+						        array(
+						            'debug'     => true,
+						            'cacheDir'  => '/tmp/',
+						            'includePaths' => array(
+						                realpath(dirname(__FILE__) . '/Stub')
+						            )
+						        )
+						    );
+
+						    // ...
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						/**
+						 * @expectedException Exception
+						 */
+						public function testIfWriteLogWhenExceptionThrown()
+						{
+							// ...
+
+						    $exceptionMessage = "An any exception";
+
+						    $logger->expects($this->once())
+						        ->method('error')
+						        ->with($exceptionMessage);
+
+						    $stub = new ClassThatThrowsExceptionStub();
+						    $stub->throwException($exceptionMessage);
+						}
+						```
+						</script>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>implementando o Go! Aop com Laravel 5.4</h2>
+					</section>
+				</section>				
+				<section>
+					<div style="float: left; width: 50%">
+						<img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
+					</div>
+					<div style="float: left; width: 50%">
+						<p>Ricardo Ledo de Tulio</p>
+						<p><b>@ricardotulio</b></p>
+						<p>Desenvolvedor PHP na</p>
+						<img src="https://dashboard.pagar.me/images/reduced-logo.png">
+					</div>
+				</section>				
 			</div>
 		</div>
 
@@ -374,6 +677,10 @@
 			.highlight {
 				font-style: italic !important;
 				color: #36c !important;
+			}
+
+			code {
+				max-height: 1000px !important;
 			}
 		</style>
 	</body>
