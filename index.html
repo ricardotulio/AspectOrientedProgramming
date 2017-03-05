@@ -85,7 +85,7 @@
 						}
 						```
 						</script>
-					</section>				
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 						```php
@@ -113,20 +113,23 @@
 					</section>
 					<section>
 						<p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
-					</section>	
-					<section>
-						<p>em programação orientada a aspectos, chamamos esse código de <span class="highlight">código de interesse compartilhado</span>
 					</section>
-				</section>	
-
+					<section>
+						<p>em programação orientada a aspectos, chamamos esse código de <span class="highlight">código de interesse transversal</span>
+					</section>
+				</section>
 				<section>
 					<section>
 						<h2>bom... mas afinal o que é a <span class="highlight">programação orientada a aspectos</span>?</h2>
-					</section>				
+					</section>
 					<section>
 						<h2>aspecto</h2>
-						<p>é aquilo que faz parte da aparência ou face exterior de algo ou alguém</p>
-					</section>				
+                        <p>é aquilo que faz parte da <span class="highlight">aparência ou face exterior de algo ou alguém</span></p>
+					</section>
+					<section>
+                        <h2>programação orientada a aspectos é</h2>
+                        <p>modelo de programação que possibilita a devida separação de responsabilidades, considerando funcionalidades que <span class="highlight">são essenciais para um grupo de objetos, mas não são de responsabilidade direta deles</span>.</p>
+					</section>
 					<section>
 						<h2>Exemplos:</h2>
 						<ul>
@@ -182,11 +185,11 @@
 						}
 						```
 						</script>
-					</section>		
+					</section>
 					<section>
 						<h2>advices</h2>
 						<p>são fragmentos de código que contém o comportamento de um aspecto</p>
-					</section>		
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 						```php
@@ -202,7 +205,7 @@
 					<section>
 						<h2>Go! Aop</h2>
 						<p>é um framework que nos permite fazer uso da programação orientada a aspectos em PHP</p>
-						<br />				
+						<br />
 						<small><a href="https://github.com/goaop/framework">https://github.com/goaop/framework</a></small>
 					</section>
 					<section data-markdown>
@@ -223,7 +226,7 @@
 
 						use Go\Core\AspectKernel;
 						use Go\Core\AspectContainer;
-						
+
 						final class ApplicationAspectKernel extends AspectKernel
 						{
 						    protected function configureAop(AspectContainer $container)
@@ -231,7 +234,7 @@
 						}
 						```
 						</script>
-					</section>				
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 						## inicializando o Go! Aop
@@ -239,7 +242,7 @@
 						// src/bootstrap.php
 
 						use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
-						
+
 						require_once '../vendor/autoload.php';
 
 						$aspectKernel = ApplicationAspectKernel::getInstance();
@@ -290,7 +293,7 @@
 							$logger = new Logger('errorLog');
 							$logger->pushHandler(
 								new StreamHandler(
-									'../log/error.log', 
+									'../log/error.log',
 									Logger::ERROR
 								)
 							);
@@ -307,7 +310,7 @@
 						<script type="text/template">
 						## testando o funcionamento do nosso aspecto
 						```php
-						class ExceptionThrowerClass 
+						class ExceptionThrowerClass
 						{
 							public function throwException()
 							{
@@ -332,11 +335,11 @@
 					<section>
 						<h2>execution(public Example->method|method2(*))</h2>
 						<p>infere um comportamento toda vez que o método <i>method</i> ou o método <i>method2</i> da classe <i>Example</i> for executado</p>
-					</section>	
+					</section>
 					<section>
 						<h2>access(public Example->attribute)</h2>
 						<p>infere um comportamento toda vez que o atributo <i>attribute</i> da classe <i>Example</i> for acessado</p>
-					</section>													
+					</section>
 					<section>
 						<h2>initialization(Demo\**)</h2>
 						<p>infere um comportamento toda vez que for criada uma instância de uma classe que pertença ao namespace <i>Demo</i></p>
@@ -348,7 +351,7 @@
 					<section>
 						<h2>@access(My\Annotation)</h2>
 						<p>infere um comportamento toda vez que um atributo anotado com <i>@My\Annotation</i> for acessado</p>
-					</section>									
+					</section>
 					<section>
 						<h2>@Before</h2>
 						<p>permite interceptar a execução de um método e inferir um comportamento antes que ele ocorrer</p>
@@ -360,7 +363,7 @@
 					<section>
 						<h2>@AfterThrowing</h2>
 						<p>permite interceptar o lançamento de uma exceção e inferir um comportamento depois que ela for lançada</p>
-					</section>										
+					</section>
 				</section>
 				<section>
 					<section>
@@ -384,7 +387,7 @@
 						}
 						```
 						</script>
-					</section>					
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 						sempre que um método que possuir a annotation @Transactional for executado nós iremos iniciar uma *transaction*
@@ -449,7 +452,7 @@
 						também vamos criar uma classe que irá conter o aspecto de autorização
 						```php
 						// src/Aspect/AuthorizeAspect.php
-						
+
 						use Go\Aop\Aspect;
 						use Go\Lang\Annotation\AfterThrowing;
 						use Go\Aop\Intercept\MethodInvocation;
@@ -491,7 +494,7 @@
 						}
 						```
 						</script>
-					</section>	
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 						o log de exceções foi encapsulado na classe <span class="highlight">ExceptionLogAspect</span>
@@ -509,7 +512,7 @@
 						}
 						```
 						</script>
-					</section>	
+					</section>
 					<section data-markdown>
 						<script type="text/template">
 						e o gerenciamento de *transactions* foi encapsulado na classe <span class="highlight">TransactionManagerAspect</span>
@@ -526,9 +529,13 @@
 						<small>*precisamos apenas adicionar a annotation <i>@Transactional</i></small>
 						</script>
 					</section>
+                    <section>
+                        <img width="350px" src="http://3.bp.blogspot.com/-560xDXknjXE/U-g0yjDOerI/AAAAAAAAFhw/Bpq7X_wnv9E/s1600/netinho.jpg">
+                        <p>depois de um dia de princesa...</p>
+                    </section>
 					<section data-markdown>
 						<script type="text/template">
-						e esse é o resultado final :)
+						nosso código fica assim :)
 						```php
 						/**
 						 * @Transactional
@@ -543,7 +550,7 @@
 						}
 						```
 						</script>
-					</section>												
+					</section>
 				</section>
 				<section>
 					<section>
@@ -637,57 +644,6 @@
 					</section>
 				</section>
 				<section>
-					<section>
-						<h2>Go! Aop e Laravel</h2>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						$ laravel new laravel-goaop
-						```
-						</script>
-					</section>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						$ laravel new laravel-goaop
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						$ cd laravel-goaop
-						$ composer require goaop/framework
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						$ cd laravel-goaop
-						$ composer require goaop/framework
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						$ cd laravel-goaop
-						$ composer require goaop/framework
-						```
-						</script>
-					</section>
-					<script type="text/template">
-						```
-						$ cd laravel-goaop
-						$ composer require goaop/framework
-						```
-						</script>
-					</section>	
-				</section>				
-				<section>
 					<div style="float: left; width: 50%">
 						<img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
 					</div>
@@ -697,7 +653,7 @@
 						<p>Desenvolvedor PHP na</p>
 						<img src="https://dashboard.pagar.me/images/reduced-logo.png">
 					</div>
-				</section>				
+				</section>
 			</div>
 		</div>
 
