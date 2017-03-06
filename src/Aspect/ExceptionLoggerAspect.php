@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
  */
 final class ExceptionLoggerAspect implements Aspect
 {
-
     /**
      *
      * @var \Psr\Log\LoggerInterface $logger
@@ -57,8 +56,10 @@ final class ExceptionLoggerAspect implements Aspect
      *
      * @AfterThrowing("execution(public **->*(*))")
      */
-    public function writeExceptionLog(MethodInvocation $invocation)
-    {
-        $this->getLogger()->error('An any exception');
+    public function writeExceptionLog(
+        MethodInvocation $invocation,
+        \Exception $exception
+    ) {
+        $this->getLogger()->error($exception->getMessage());
     }
 }

@@ -11,7 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "goaop/framework": "^2.0",
+        "goaop/framework": "^2.1",
         "monolog/monolog": "^1.22"
     },
     "require-dev": {

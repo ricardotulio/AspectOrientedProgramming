@@ -37,7 +37,7 @@ class ExceptionLogAspectTest extends TestCase
             )
         );
 
-        $exceptionMessage = "An any exception";
+        $exceptionMessage = 'An any exception';
 
         $logger->expects($this->once())
             ->method('error')
