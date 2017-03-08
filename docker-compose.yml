@@ -6,6 +6,8 @@ services:
         volumes:
             - ./:/php/
         working_dir: /php/
+        ports:
+            - "8888:8888"
 
     composer:
         image: composer/composer

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1488936362">
+  <project timestamp="1488936362">
+    <package name="Aop\Aspect">
+      <file name="/phpunit/src/Aspect/ApplicationAspectKernel.php">
+        <class name="ApplicationAspectKernel" namespace="Aop\Aspect" fullPackage="ApplicationAspectKernel" package="ApplicationAspectKernel">
+          <metrics complexity="6" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="0" elements="12" coveredelements="0"/>
+        </class>
+        <line num="39" type="method" name="setAspectCollection" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="40" type="stmt" count="0"/>
+        <line num="41" type="stmt" count="0"/>
+        <line num="42" type="stmt" count="0"/>
+        <line num="49" type="method" name="getAspectCollection" visibility="public" complexity="2" crap="6" count="0"/>
+        <line num="50" type="stmt" count="0"/>
+        <line num="51" type="stmt" count="0"/>
+        <line num="52" type="stmt" count="0"/>
+        <line num="61" type="method" name="registerAspect" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="62" type="stmt" count="0"/>
+        <line num="63" type="stmt" count="0"/>
+        <line num="64" type="stmt" count="0"/>
+        <metrics loc="81" ncloc="36" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="0" elements="12" coveredelements="0"/>
+      </file>
+      <file name="/phpunit/src/Aspect/AspectCollection.php">
+        <class name="AspectCollection" namespace="Aop\Aspect">
+          <metrics complexity="14" methods="9" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="35" coveredstatements="0" elements="44" coveredelements="0"/>
+        </class>
+        <line num="27" type="method" name="add" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="28" type="stmt" count="0"/>
+        <line num="29" type="stmt" count="0"/>
+        <line num="30" type="stmt" count="0"/>
+        <line num="38" type="method" name="get" visibility="public" complexity="3" crap="12" count="0"/>
+        <line num="39" type="stmt" count="0"/>
+        <line num="40" type="stmt" count="0"/>
+        <line num="41" type="stmt" count="0"/>
+        <line num="51" type="method" name="remove" visibility="public" complexity="4" crap="20" count="0"/>
+        <line num="52" type="stmt" count="0"/>
+        <line num="53" type="stmt" count="0"/>
+        <line num="54" type="stmt" count="0"/>
+        <line num="55" type="stmt" count="0"/>
+        <line num="57" type="stmt" count="0"/>
+        <line num="59" type="stmt" count="0"/>
+        <line num="60" type="stmt" count="0"/>
+        <line num="61" type="stmt" count="0"/>
+        <line num="63" type="stmt" count="0"/>
+        <line num="64" type="stmt" count="0"/>
+        <line num="65" type="stmt" count="0"/>
+        <line num="72" type="method" name="count" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="73" type="stmt" count="0"/>
+        <line num="74" type="stmt" count="0"/>
+        <line num="75" type="stmt" count="0"/>
+        <line num="77" type="method" name="rewind" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="78" type="stmt" count="0"/>
+        <line num="79" type="stmt" count="0"/>
+        <line num="80" type="stmt" count="0"/>
+        <line num="82" type="method" name="current" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="83" type="stmt" count="0"/>
+        <line num="84" type="stmt" count="0"/>
+        <line num="85" type="stmt" count="0"/>
+        <line num="87" type="method" name="key" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="88" type="stmt" count="0"/>
+        <line num="89" type="stmt" count="0"/>
+        <line num="90" type="stmt" count="0"/>
+        <line num="92" type="method" name="next" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="93" type="stmt" count="0"/>
+        <line num="94" type="stmt" count="0"/>
+        <line num="95" type="stmt" count="0"/>
+        <line num="97" type="method" name="valid" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="98" type="stmt" count="0"/>
+        <line num="99" type="stmt" count="0"/>
+        <line num="100" type="stmt" count="0"/>
+        <metrics loc="101" ncloc="70" classes="1" methods="9" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="35" coveredstatements="0" elements="44" coveredelements="0"/>
+      </file>
+      <file name="/phpunit/src/Aspect/ExceptionLoggerAspect.php">
+        <class name="ExceptionLoggerAspect" namespace="Aop\Aspect" fullPackage="Aop" package="Aop">
+          <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="3" coveredelements="0"/>
+        </class>
+        <line num="59" type="method" name="writeExceptionLog" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="63" type="stmt" count="0"/>
+        <line num="64" type="stmt" count="0"/>
+        <metrics loc="65" ncloc="31" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="3" coveredelements="0"/>
+      </file>
+    </package>
+    <file name="/phpunit/src/Aspect/AspectCollectionInterface.php">
+      <metrics loc="16" ncloc="16" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <metrics files="4" loc="263" ncloc="153" classes="3" methods="13" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="59" coveredelements="0"/>
+  </project>
+</coverage>
