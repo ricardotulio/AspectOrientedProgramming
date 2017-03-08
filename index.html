@@ -326,47 +326,6 @@
 				</section>
 				<section>
 					<section>
-						<h2>referência de <i>pointcuts</i> e <i>advices</i></h2>
-					</section>
-					<section>
-						<h2>execution(public Example->method(*))</h2>
-						<p>infere um comportamento toda vez que o método <i>method</i> da classe <i>Example</i> for executado</p>
-					</section>
-					<section>
-						<h2>execution(public Example->method|method2(*))</h2>
-						<p>infere um comportamento toda vez que o método <i>method</i> ou o método <i>method2</i> da classe <i>Example</i> for executado</p>
-					</section>
-					<section>
-						<h2>access(public Example->attribute)</h2>
-						<p>infere um comportamento toda vez que o atributo <i>attribute</i> da classe <i>Example</i> for acessado</p>
-					</section>
-					<section>
-						<h2>initialization(Demo\**)</h2>
-						<p>infere um comportamento toda vez que for criada uma instância de uma classe que pertença ao namespace <i>Demo</i></p>
-					</section>
-					<section>
-						<h2>@execution(My\Annotation)</h2>
-						<p>infere um comportamento toda vez que um método anotado com <i>@My\Annotation</i> for executado</p>
-					</section>
-					<section>
-						<h2>@access(My\Annotation)</h2>
-						<p>infere um comportamento toda vez que um atributo anotado com <i>@My\Annotation</i> for acessado</p>
-					</section>
-					<section>
-						<h2>@Before</h2>
-						<p>permite interceptar a execução de um método e inferir um comportamento antes que ele ocorrer</p>
-					</section>
-					<section>
-						<h2>@After</h2>
-						<p>permite interceptar a execução de um método e inferir um comportamento depois que ele ocorrer</p>
-					</section>
-					<section>
-						<h2>@AfterThrowing</h2>
-						<p>permite interceptar o lançamento de uma exceção e inferir um comportamento depois que ela for lançada</p>
-					</section>
-				</section>
-				<section>
-					<section>
 						<h2>refatorando nosso código que persiste produtos</h2>
 					</section>
 					<section data-markdown>
@@ -531,7 +490,7 @@
 					</section>
                     <section>
                         <img width="350px" src="http://3.bp.blogspot.com/-560xDXknjXE/U-g0yjDOerI/AAAAAAAAFhw/Bpq7X_wnv9E/s1600/netinho.jpg">
-                        <p>depois de um dia de princesa...</p>
+                        <h2>depois de um dia de princesa...</h2>
                     </section>
 					<section data-markdown>
 						<script type="text/template">
@@ -644,15 +603,318 @@
 					</section>
 				</section>
 				<section>
-					<div style="float: left; width: 50%">
-						<img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
-					</div>
-					<div style="float: left; width: 50%">
-						<p>Ricardo Ledo de Tulio</p>
-						<p><b>@ricardotulio</b></p>
-						<p>Desenvolvedor PHP na</p>
-						<img src="https://dashboard.pagar.me/images/reduced-logo.png">
-					</div>
+					<section>
+                        <img width="300px" src="http://s2.glbimg.com/hdsIFDj3oY1EOCyne6Rmp-DpkllTGU1qGUChAN4ZPGqfaJZ1u3YDTeCDtm-NeEfI/i.glbimg.com/og/ig/f/original/2013/07/12/misterm2.jpg">
+                        <h2>desvendando a mágica por trás do Go! Aop...</h2>
+					</section>
+					<section>
+						<h2>o pattern <span class="highlight">proxy</span></h2>
+						<p>é um padrão estrutural que nos permite encapsular um objeto através de um outro objeto que possui a mesma interface, de forma que o <span class="highlight">segundo objeto  controle o acesso ao primeiro, que é o objeto real.</span></p>
+					</section>
+					<section>
+						<img width="800px" src="proxy.png">
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						final class BeforeInterceptor 
+							extends BaseInterceptor 
+							implements AdviceBefore
+						{
+						    public function invoke(Joinpoint $joinpoint)
+						    {
+						        $adviceMethod = $this->adviceMethod;
+						        $adviceMethod($joinpoint);
+
+						        return $joinpoint->proceed();
+						    }
+						}
+						```
+						</script>
+					</section>	
+					<section data-markdown>
+						<script type="text/template">
+						```
+						final class AfterInterceptor extends BaseInterceptor implements AdviceAfter
+						{
+						    public function invoke(Joinpoint $joinpoint)
+						    {
+						        try {
+						            $result = $joinpoint->proceed();
+						        } finally {
+						            $adviceMethod = $this->adviceMethod;
+						            $adviceMethod($joinpoint);
+						        }
+
+						        return $result;
+						    }
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						final class AfterThrowingInterceptor extends BaseInterceptor implements AdviceAfter
+						{
+						    public function invoke(Joinpoint $joinpoint)
+						    {
+						        try {
+						            $result = $joinpoint->proceed();
+						        } catch (Exception $invocationException) {
+						            $adviceMethod = $this->adviceMethod;
+						            $adviceMethod($joinpoint, $invocationException);
+
+						            throw $invocationException;
+						        }
+
+						        return $result;
+						    }
+						}
+						```
+						</script>
+					</section>
+					<section>
+						<h2>spl_autoload_register()</h2>
+						<p>permite registrar uma função responsável por carregar classes e interfaces automaticamente</p>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							```
+							spl_autoload_register(function($className) {
+								require_once 'src/' . $className . 'php';
+							});
+
+							$product = new \Product();
+							// require_once 'src/Product.php';
+							```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							```
+							class MyAutoloader 
+							{
+								public function loadClass($className)
+								{
+									require_once 'src/' . $className . 'php';
+								}
+							}
+
+							spl_autoload_register(array('MyAutoloader', 'loadClass'));
+
+							$product = new \Product();
+							// require_once 'src/Product.php';
+							```
+						</script>
+					</section>					
+					<section>
+						<h2>spl_autoload_unregister()</h2>
+						<p>permite remover uma função já registrada</p>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							```
+							spl_autoload_unregister(array('MyAutoloader', 'loadClass'));
+
+							$product = new \Product();
+							// Fatal error: class does not exists
+							```
+						</script>
+					</section>								
+					<section data-markdown>
+						<script type="text/template">
+						```php
+						public static function init(array $options = [], AspectContainer $container)
+						{
+							$loaders = spl_autoload_functions();
+							foreach ($loaders as &$loader) {
+							    $loaderToUnregister = $loader;
+							    if (is_array($loader) 
+							    	&& ($loader[0] instanceof ClassLoader)) {
+							        $originalLoader = $loader[0];
+		
+									// ...
+
+							        $loader[0] = new AopComposerLoader(
+							        	$loader[0], $container, $options);
+							        self::$wasInitialized = true;
+							    }
+							    spl_autoload_unregister($loaderToUnregister);
+							}
+							unset($loader);
+							foreach ($loaders as $loader) {
+							    spl_autoload_register($loader);
+							}
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						public function loadClass($class)
+						{
+						    $file = $this->findFile($class);
+						    if ($file) {
+						        include $file;
+						    }
+						}
+						```
+						</script>
+					</section>					
+					<section data-markdown>
+						<script type="text/template">
+						```
+						public function findFile($class)
+						{
+							static $isAllowedFilter = null, $isProduction = false;
+							if (!$isAllowedFilter) {
+							    $isAllowedFilter = $this->fileEnumerator->getFilter();
+							    $isProduction    = !$this->options['debug'];
+							}
+							$file = $this->original->findFile($class);
+							if ($file) {
+							    $file = PathResolver::realpath($file)?:$file;
+							    $cacheState = isset($this->cacheState[$file]) 
+							    	? $this->cacheState[$file] : null;
+							    if ($cacheState && $isProduction) {
+							        $file = $cacheState['cacheUri'] ?: $file;
+							    } elseif ($isAllowedFilter(new \SplFileInfo($file))) {
+							        $file = FilterInjectorTransformer::rewrite($file);
+							    }
+							}
+							return $file;
+						}
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						// cache/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+
+						namespace Aop\Aspect\Stub;
+
+						use Exception;
+
+						class ClassThatThrowsExceptionStub__AopProxied
+						{
+						    public function throwException($message)
+						    {
+						        throw new Exception($message);
+						    }
+						}
+
+						include_once AOP_CACHE_DIR 
+							. '/_proxies/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php';
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						// cache/_proxyes/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+
+						namespace Aop\Aspect\Stub;
+
+						use Exception as Exception;
+
+						class ClassThatThrowsExceptionStub 
+							extends ClassThatThrowsExceptionStub__AopProxied 
+							implements \Go\Aop\Proxy
+						{
+						    private static $__joinPoints = [];
+						    
+						    public function throwException($message)
+						    {
+						        return self::$__joinPoints['method:throwException']
+						            ->__invoke($this, [$message]);
+						    }
+						    
+						}
+						// ...
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						// cache/_proxyes/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+
+						namespace Aop\Aspect\Stub;
+
+						use Exception as Exception;
+
+						class ClassThatThrowsExceptionStub 
+							extends ClassThatThrowsExceptionStub__AopProxied 
+							implements \Go\Aop\Proxy
+						{
+							// ...						    
+						}
+						\Go\Proxy\ClassProxy::injectJoinPoints('Aop\Aspect\Stub\ClassThatThrowsExceptionStub',array (
+						  'method' => 
+						  array (
+						    'throwException' => 
+						    array (
+						      0 => 'advisor.Aop\\Aspect\\ExceptionLoggerAspect->writeExceptionLog',
+						    ),
+						  ),
+						));
+						```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						```
+						// ...
+						class ClassProxy extends AbstractProxy
+						{
+							// ...
+						    public static function injectJoinPoints($className, array $advices = [])
+						    {
+						        $reflectionClass  = new ReflectionClass($className);
+						        $joinPoints       = static::wrapWithJoinPoints(
+						        	$advices, 
+						        	$reflectionClass->getParentClass()->name
+						        );
+
+						        $prop = $reflectionClass->getProperty('__joinPoints');
+						        $prop->setAccessible(true);
+						        $prop->setValue($joinPoints);
+
+						        // ...
+						    }
+						    // ...
+						}
+						```
+						</script>
+					</section>
+				</section>
+				<section>
+					<section>					
+						<h2>referencias:</h2>
+						<p>Doc oficial - <a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
+						<p>Exemplos de uso - <a href="https://github.com/ricardotulio/AspectOrientedProgramming/">https://github.com/ricardotulio/AspectOrientedProgramming/</a></p>
+					</section>
+					<section>					
+						<h2>bibliografia:</h2>
+						<p><a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
+						<p><a href="http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos">http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos</a></p>
+						<p><a href="http://php.net/manual/pt_BR/function.spl-autoload-register.php">http://php.net/manual/pt_BR/function.spl-autoload-register.php</a></p>
+						<p><a href="http://php.net/manual/pt_BR/function.spl-autoload-unregister.php">http://php.net/manual/pt_BR/function.spl-autoload-unregister.php</a></p>
+					</section>					
+					<section>
+						<div style="float: left; width: 50%">
+							<img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
+						</div>
+						<div style="float: left; width: 50%">
+							<p>Ricardo Ledo de Tulio</p>
+							<p><b>@ricardotulio</b></p>
+							<p>Desenvolvedor PHP na</p>
+							<img src="https://dashboard.pagar.me/images/reduced-logo.png">
+						</div>
+					</section>
 				</section>
 			</div>
 		</div>
