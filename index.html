@@ -1,956 +1,869 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+        <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>
-					<p>Programação</p>
-					<h1>Orientada a <i>Aspectos</i></h1>
-					<p>em PHP</p>
-				</section>
-				<section>
-					<section>
-						<h2>o que é programação orientada a <span class="highlight">aspectos</span>?</h2>
-					</section>
-					<section>
-						<h2>tá... mas o que isso significa?</h2>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							$product = new Product();
-							$product->setName($productName);
-							$product->setPrice($price);
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <p>Programação</p>
+                    <h1>Orientada a <i>Aspectos</i></h1>
+                    <p>em PHP</p>
+                </section>
+                <section>
+                    <section>
+                        <h2>partindo do <span class="highlight">problema</span></h2>
+                    </section>
+                    <section>
+                        <h2>quando modelamos um sistema orientado a objetos, conseguimos separar
+                        <span class="highlight">interesses e responsabilidades em classes</span></h2>
+                    </section>
+                    <section>
+                        <h2>porém, utilizando apenas a modelagem orientada a objetos, nos deparamos com <span class="highlight">responsabilidades que são difíceis de isolar</span></h2>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            $product = new Product();
+                            $product->setName($productName);
+                            $product->setPrice($price);
 
-							$this->entityManager->persist($product);
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							$product = new Product();
-							$product->setName($productName);
-							$product->setPrice($price);
+                            $this->entityManager->persist($product);
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            $product = new Product();
+                            $product->setName($productName);
+                            $product->setPrice($price);
 
-							$this->entityManager->beginTransaction();
-							$this->entityManager->persist($product);
-							$this->entityManager->commit();
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							if(!$this->security->isGranted('ROLE_ADMIN')) {
-								throw new AccessDeniedException();
-							}
+                            $this->entityManager->beginTransaction();
+                            $this->entityManager->persist($product);
+                            $this->entityManager->commit();
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            try {
+                                $product = new Product();
+                                $product->setName($productName);
+                                $product->setPrice($price);
 
-							$product = new Product();
-							$product->setName($productName);
-							$product->setPrice($price);
-
-							$this->entityManager->beginTransaction();
-							$this->entityManager->persist($product);
-							$this->entityManager->commit();
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							if(!$this->security->isGranted('ROLE_ADMIN')) {
-								throw new AccessDeniedException();
-							}
-
-							try {
-								$product = new Product();
-								$product->setName($productName);
-								$product->setPrice($price);
-
-								$this->entityManager->beginTransaction();
-								$this->entityManager->persist($product);
-								$this->entityManager->commit();
-							} catch(PDOException $e) {
-								$this->log->error($e->getMessage());
-								throw $e;
-							}
-						}
-						```
-						</script>
-					</section>
-					<section>
-						<p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
-					</section>
-					<section>
-						<p>em programação orientada a aspectos, chamamos esse código de <span class="highlight">código de interesse transversal</span>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h2>bom... mas afinal o que é a <span class="highlight">programação orientada a aspectos</span>?</h2>
-					</section>
-					<section>
-						<h2>aspecto</h2>
+                                $this->entityManager->beginTransaction();
+                                $this->entityManager->persist($product);
+                                $this->entityManager->commit();
+                            } catch(PDOException $e) {
+                                $this->log->error($e->getMessage());
+                                throw $e;
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section>
+                        <p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
+                    </section>
+                    <section>
+                        <p>em programação orientada a aspectos, chamamos esse código de <span class="highlight">código de interesse transversal</span>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>bom... mas afinal o que é a <span class="highlight">programação orientada a aspectos</span>?</h2>
+                    </section>
+                    <section>
+                        <h2>aspecto</h2>
                         <p>é aquilo que faz parte da <span class="highlight">aparência ou face exterior de algo ou alguém</span></p>
-					</section>
-					<section>
+                    </section>
+                    <section>
                         <h2>programação orientada a aspectos é</h2>
                         <p>modelo de programação que possibilita a devida separação de responsabilidades, considerando funcionalidades que <span class="highlight">são essenciais para um grupo de objetos, mas não são de responsabilidade direta deles</span>.</p>
-					</section>
-					<section>
-						<h2>Exemplos:</h2>
-						<ul>
-							<li>log</li>
-							<li>cache</li>
-							<li>gerenciamento de <i>transactions</i></li>
-							<li>injeção de dependências</li>
-							<li>autorização</li>
-						</ul>
-					</section>
-					<section>
-						<h2>joinpoints</h2>
-						<p>são partes da minha aplicação que possuem algum aspecto</p>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						// createNewProduct é um joinpoint que possui o
-						// aspecto "autorização"
-						public function createNewProduct($productName, $price)
-						{
-							if(!$this->security->isGranted('ROLE_ADMIN')) {
-								throw new AccessDeniedException();
-							}
+                    </section>
+                    <section>
+                        <h2>Exemplos:</h2>
+                        <ul>
+                            <li>log</li>
+                            <li>cache</li>
+                            <li>gerenciamento de <i>transactions</i></li>
+                            <li>injeção de dependências</li>
+                            <li>autorização</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>joinpoints</h2>
+                        <p>são partes da minha aplicação que possuem algum aspecto</p>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        // createNewProduct é um joinpoint que possui os
+                        // aspectos
+                        public function createNewProduct($productName, $price)
+                        {
+                            try {
+                                $product = new Product();
+                                $product->setName($productName);
+                                $product->setPrice($price);
 
-							$product = new Product();
-							$product->setName($productName);
-							$product->setPrice($price);
+                                $this->entityManager->beginTransaction();
+                                $this->entityManager->persist($product);
+                                $this->entityManager->commit();
+                            } catch(PDOException $e) {
+                                $this->log->error($e->getMessage());
+                                throw $e;
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section>
+                        <h2>pointcuts</h2>
+                        <p>são expressões que identificam os joinpoints</p>
+                    </section>
+                    <section>
+                        <h2>pointcuts</h2>
+                        <p>podemos usar namespaces, classes e expressões regulares para identificar os <span class="highlight">joinpoints</span></p>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        #### execution(public ProductRepository->persist(*))
+                        ```
+                        /**
+                         * @Before("execution(public ProductRepository->persist(*))")
+                         */
+                        ```
+                        </script>
+                    </section>
+                    <section>
+                        <h2>advices</h2>
+                        <p>são fragmentos de código que contém o comportamento de um aspecto</p>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## <span class="highlight">Advice</span> responsável por gravar log de exceções
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            // ...
+                            try {
+                                // Faz alguma coisa ...
+                            } catch(PDOException $e) {
+                                $this->log->error($e->getMessage());
+                                throw $e;
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## <span class="highlight">Advice</span> responsável por gerenciar transações
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            try {
+                                $this->entityManager->beginTransaction();
+                                // faz alguma coisa...
+                                $this->entityManager->commit();
+                            catch(\PDOException $e) {
+                                $this->entityManager->rollBack();
+                                throw $e;
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Go! Aop</h2>
+                        <p>é um framework que nos permite fazer uso da programação orientada a aspectos em PHP</p>
+                        <br />
+                        <small><a href="https://github.com/goaop/framework">https://github.com/goaop/framework</a></small>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## instalando o Go! Aop
+                        ```
+                        $ composer require goaop/framework
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## implementando nosso AspectKernel
+                        ```
+                        // src/Aspect/ApplicationAspectKernel.php
 
-							$this->entityManager->persist($product);
-						}
-						```
-						</script>
-					</section>
-					<section>
-						<h2>pointcuts</h2>
-						<p>são expressões que identificam os joinpoints</p>
-					</section>
-					<section>
-						<h2>pointcuts</h2>
-						<p>podemos usar namespaces, classes e expressões regulares para identificar os <span class="highlight">joinpoints</span></p>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						execution(public ProductRepository->persist(*))
-						```php
-						/**
-						 * @Before("execution(public ProductRepository->persist(*))")
-						 */
-						public function startTransaction(MethodInvocation $invocation)
-						{
-							$this->entityManager->beginTransaction();
-						}
-						```
-						</script>
-					</section>
-					<section>
-						<h2>advices</h2>
-						<p>são fragmentos de código que contém o comportamento de um aspecto</p>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						public function startTransaction(MethodInvocation $invocation)
-						{
-							$this->entityManager->beginTransaction();
-						}
-						```
-						</script>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h2>Go! Aop</h2>
-						<p>é um framework que nos permite fazer uso da programação orientada a aspectos em PHP</p>
-						<br />
-						<small><a href="https://github.com/goaop/framework">https://github.com/goaop/framework</a></small>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## instalando o Go! Aop
-						```
-						$ composer require goaop/framework
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## implementando nosso AspectKernel
-						```
-						// src/Aspect/ApplicationAspectKernel.php
+                        namespace App\Aspect;
 
-						namespace Aop\Aspect;
+                        use Go\Core\AspectKernel;
+                        use Go\Core\AspectContainer;
 
-						use Go\Core\AspectKernel;
-						use Go\Core\AspectContainer;
+                        final class ApplicationAspectKernel extends AspectKernel
+                        {
+                            protected function configureAop(AspectContainer $container)
+                            {}
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## inicializando o Go! Aop
+                        ```php
+                        // src/bootstrap.php
 
-						final class ApplicationAspectKernel extends AspectKernel
-						{
-						    protected function configureAop(AspectContainer $container)
-						    {}
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## inicializando o Go! Aop
-						```php
-						// src/bootstrap.php
+                        use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
 
-						use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
+                        require_once '../vendor/autoload.php';
 
-						require_once '../vendor/autoload.php';
+                        $aspectKernel = ApplicationAspectKernel::getInstance();
+                        $aspectKernel->init(
+                            [
+                                'debug'        => true,
+                                'cacheDir'     => '../cache/',
+                                'includePaths' => [
+                                    './'
+                                ]
+                            ]
+                        );
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## criando nosso aspecto
+                        ```php
+                        // src/Aspect/ExceptionLogAspect.php
 
-						$aspectKernel = ApplicationAspectKernel::getInstance();
-						$aspectKernel->init(
-						    [
-						        'debug'        => true,
-						        'cacheDir'     => '../cache/',
-						        'includePaths' => [
-						            './'
-						        ]
-						    ]
-						);
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## criando nosso aspecto
-						```php
-						// src/Aspect/ExceptionLogAspect.php
+                        namespace App\Aspect;
 
-						namespace Aop\Aspect;
+                        use Go\Aop\Aspect;
+                        use Go\Lang\Annotation\AfterThrowing;
+                        use Go\Aop\Intercept\MethodInvocation;
+                        use Psr\Log\LoggerInterface;
 
-						use Go\Aop\Aspect;
-						use Go\Lang\Annotation\AfterThrowing;
-						use Go\Aop\Intercept\MethodInvocation;
-						use Psr\Log\LoggerInterface;
+                        final class ExceptionLoggerAspect implements Aspect
+                        {
+                            /**
+                             * @AfterThrowing("execution(public **->*(*))")
+                             */
+                            public function writeExceptionLog(
+                                MethodInvocation $invocation,
+                                Exception $e
+                            ) {
+                                $this->getLogger()->error($e->getMessage());
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## registrando nosso aspecto
+                        ```php
+                        protected function configureAop(AspectContainer $container)
+                        {
+                            $logger = new Logger('errorLog');
+                            $logger->pushHandler(
+                                new StreamHandler(
+                                    '../log/error.log',
+                                    Logger::ERROR
+                                )
+                            );
 
-						final class ExceptionLoggerAspect implements Aspect
-						{
-							/*
-						     * @AfterThrowing("execution(public **->*(*))")
-						     */
-						    public function writeExceptionLog(MethodInvocation $invocation)
-						    {
-						        $this->getLogger()->error('An any exception');
-						    }
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## registrando nosso aspecto
-						```php
-						protected function configureAop(AspectContainer $container)
-						{
-							$logger = new Logger('errorLog');
-							$logger->pushHandler(
-								new StreamHandler(
-									'../log/error.log',
-									Logger::ERROR
-								)
-							);
+                            $exceptionLoggerAspect = new ExceptionLoggerAspect();
+                            $exceptionLoggerAspect->withLogger($logger);
 
-							$exceptionLoggerAspect = new ExceptionLoggerAspect();
-							$exceptionLoggerAspect->withLogger($logger);
+                            $container->registerAspect($exceptionLoggerAspect);
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## testando o funcionamento do nosso aspecto
+                        ```php
+                        class ExceptionThrowerClass
+                        {
+                            public function throwException()
+                            {
+                                throw new Exception('my exception');
+                            }
+                        }
 
-							$container->registerAspect($exceptionLoggerAspect);
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## testando o funcionamento do nosso aspecto
-						```php
-						class ExceptionThrowerClass
-						{
-							public function throwException()
-							{
-								throw new Exception('my exception');
-							}
-						}
+                        $throwerClass = new ExceptionThrowerClass();
+                        $throwerClass->throwException();
+                        ```
+                        </script>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>refatorando nosso código que persiste produtos</h2>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## formas de declarar <span class="highlight">pointcuts</span>
+                            - execution(public \*\\\*->*())
+                            - access(public \*\\\*->*)
+                            - initialization(App\Repository\ProductRepository)
+                            - !execution(public App\Controller\\\*->*())
+                            - @execution(App\Annotation\Transactional)
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## formas de declarar <span class="highlight">advices</span>
+                            - @Before
+                            - @After
+                            - @AfterThrowing
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        criando nosso aspecto para gerenciar *transactions*
+                        ```php
+                        // src/Aspect/ExceptionLogAspect.php
 
-						$throwerClass = new ExceptionThrowerClass();
-						$throwerClass->throwException();
-						```
-						</script>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h2>refatorando nosso código que persiste produtos</h2>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						criando nosso aspecto para gerenciar *transactions*
-						```php
-						// src/Aspect/ExceptionLogAspect.php
+                        namespace App\Aspect;
 
-						namespace Aop\Aspect;
+                        use Go\Aop\Aspect;
+                        use Go\Lang\Annotation\AfterThrowing;
+                        use Go\Aop\Intercept\MethodInvocation;
 
-						use Go\Aop\Aspect;
-						use Go\Lang\Annotation\AfterThrowing;
-						use Go\Aop\Intercept\MethodInvocation;
+                        final class TransactionManagerAspect implements Aspect
+                        {
+                            // ...
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        sempre que um método que possuir a annotation @Transactional for executado nós iremos iniciar uma *transaction*
+                        ```php
+                        final class TransactionManagerAspect implements Aspect
+                        {
+                            /**
+                             * @Before("@execution(Annotation\Transactional)")
+                             */
+                            public function beginTransaction(MethodInvocation $invocation)
+                            {
+                                $this->entityManager->beginTransaction();
+                            }
 
-						final class TransactionManagerAspect implements Aspect
-						{
-						    // ...
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						sempre que um método que possuir a annotation @Transactional for executado nós iremos iniciar uma *transaction*
-						```php
-						final class TransactionManagerAspect implements Aspect
-						{
-							/*
-						     * @Before("@execution(Annotation\Transactional)")
-						     */
-						    public function beginTransaction(MethodInvocation $invocation)
-						    {
-						    	$this->entityManager->beginTransaction();
-						    }
+                            // ...
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        e após a execução do método iremos commitar
+                        ```php
+                        final class TransactionManagerAspect implements Aspect
+                        {
+                            // ...
 
-						    // ...
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						e após a execução do método iremos commitar a *transaction*
-						```php
-						final class TransactionManagerAspect implements Aspect
-						{
-							// ...
+                            /**
+                             * @After("@execution(Annotation\Transactional)")
+                             */
+                            public function commitTransaction(MethodInvocation $invocation)
+                            {
+                                $this->entityManager->commit();
+                            }
 
-							/*
-						     * @After("@execution(Annotation\Transactional)")
-						     */
-						    public function commitTransaction(MethodInvocation $invocation)
-						    {
-						    	$this->entityManager->commit();
-						    }
+                            // ...
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        caso lance alguma exceção, fazemos um *rollback*
+                        ```php
+                        final class TransactionManagerAspect implements Aspect
+                        {
+                            // ...
 
-						    // ...
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						também vamos executar um *rollback* caso alguma exceção seja lançada
-						```php
-						final class TransactionManagerAspect implements Aspect
-						{
-						    // ...
-
-							/*
-						     * @AfterThrow("execution(public **->*(*))")
-						     */
-						    public function commitTransaction(MethodInvocation $invocation)
-						    {
-						    	$this->entityManager->rollBack();
-						    }
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						também vamos criar uma classe que irá conter o aspecto de autorização
-						```php
-						// src/Aspect/AuthorizeAspect.php
-
-						use Go\Aop\Aspect;
-						use Go\Lang\Annotation\AfterThrowing;
-						use Go\Aop\Intercept\MethodInvocation;
-
-						final class AuthorizationAspect implements Aspect
-						{
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						e toda vez que qualquer método público for executado, vamos checar as permissões
-						```php
-						final class AuthorizationAspect implements Aspect
-						{
-							/*
-						     * @Before("execution(public **->*(*))")
-						     */
-						    public function authorize(MethodInvocation $invocation)
-						    {
-						    }
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						então o nosso código que verificava a autorização foi encapsulado na classe <span class="highlight">AuthorizeAspect</span>
-
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							// if(!$this->security->isGranted('ROLE_ADMIN')) {
-							//   throw new AccessDeniedException();
-							// }
-
-							// ...
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						o log de exceções foi encapsulado na classe <span class="highlight">ExceptionLogAspect</span>
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							// ..
-
-							// try {
-							/// ...
-							// } catch(PDOException $e) {
-							//   $this->log->error($e->getMessage());
-							// 	 throw $e;
-							// }
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						e o gerenciamento de *transactions* foi encapsulado na classe <span class="highlight">TransactionManagerAspect</span>
-						```php
-						public function createNewProduct($productName, $price)
-						{
-							// ..
-
-							//    $this->entityManager->beginTransaction();
-							//    $this->entityManager->persist($product);
-							//    $this->entityManager->commit();
-						}
-						```
-						<small>*precisamos apenas adicionar a annotation <i>@Transactional</i></small>
-						</script>
-					</section>
+                            /**
+                             * @AfterThrow("execution(public **->*(*))")
+                             */
+                            public function commitTransaction(MethodInvocation $invocation)
+                            {
+                                $this->entityManager->rollBack();
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
                     <section>
                         <img width="350px" src="http://3.bp.blogspot.com/-560xDXknjXE/U-g0yjDOerI/AAAAAAAAFhw/Bpq7X_wnv9E/s1600/netinho.jpg">
                         <h2>depois de um dia de princesa...</h2>
                     </section>
-					<section data-markdown>
-						<script type="text/template">
-						nosso código fica assim :)
-						```php
-						/**
-						 * @Transactional
-						 */
-						public function createNewProduct($productName, $price)
-						{
-							$product = new Product();
-							$product->setName($productName);
-							$product->setPrice($price);
+                    <section data-markdown>
+                        <script type="text/template">
+                        nosso código que gerencia log de exceções foi encapsulado na classe <span class="highlight">ExceptionLogAspect</span>
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            // ..
 
-							$this->entityManager->persist($product);
-						}
-						```
-						</script>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h2>Go! Aop e PHPUnit</h2>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						// tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+                            // try {
+                            /// ...
+                            // } catch(PDOException $e) {
+                            //   $this->log->error($e->getMessage());
+                            //   throw $e;
+                            // }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        e o gerenciamento de *transactions* foi encapsulado na classe <span class="highlight">TransactionManagerAspect</span>
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
+                            // ..
+                            // try {
+                            //    $this->entityManager->beginTransaction();
+                            //    $this->entityManager->persist($product);
+                            //    $this->entityManager->commit();
+                            // } catch(\PDOException $e) {
+                            //    $this->entityManager->rollBack();
+                            //    throw $e;
+                            // }
+                        }
+                        ```
+                        <small>*precisamos apenas adicionar a annotation <i>@Transactional</i></small>
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        nosso código fica assim :)
+                        ```php
+                        /**
+                         * @Transactional
+                         */
+                        public function createNewProduct($productName, $price)
+                        {
+                            $product = new Product();
+                            $product->setName($productName);
+                            $product->setPrice($price);
 
-						namespace Aop\Aspect\Stub;
+                            $this->entityManager->persist($product);
+                        }
+                        ```
+                        </script>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <img width="350px" src="https://pbs.twimg.com/profile_images/2451729216/q3fc167snojlg9wr9ti1_400x400.jpeg">
+                        <h2>e o que acontece por trás do Go! Aop?</h2>
+                    </section>
+                    <section>
+                        <h2>o pattern <span class="highlight">proxy</span></h2>
+                        <p>é um padrão estrutural que nos permite encapsular um objeto através de um outro objeto que possui a mesma interface, de forma que o <span class="highlight">segundo objeto  controle o acesso ao primeiro, que é o objeto real.</span></p>
+                    </section>
+                    <section>
+                        <img width="800px" src="proxy.png">
+                    </section>
+                    <section>
+                        <h2>spl_autoload_register()</h2>
+                        <p>permite registrar uma função responsável por carregar classes e interfaces automaticamente</p>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ```
+                            spl_autoload_register(function($className) {
+                                require_once 'src/' . $className . 'php';
+                            });
 
-						class ClassThatThrowsExceptionStub
-						{
-						    public function throwException($message)
-						    {
-						        throw new \Exception($message);
-						    }
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						/**
-						 * @expectedException Exception
-						 */
-						public function testIfWriteLogWhenExceptionThrown()
-						{
-						    $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
-						        ->getMock();
+                            $product = new \Product();
+                            // require_once 'src/Product.php';
+                            ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ```
+                            class MyAutoloader
+                            {
+                                public function loadClass($className)
+                                {
+                                    require_once 'src/' . $className . 'php';
+                                }
+                            }
 
-						    $aspect = new ExceptionLoggerAspect();
-						    $aspect->withLogger($logger);
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						/**
-						 * @expectedException Exception
-						 */
-						public function testIfWriteLogWhenExceptionThrown()
-						{
-							// ...
+                            spl_autoload_register(array('MyAutoloader', 'loadClass'));
 
-							$aspectCollection = new AspectCollection();
-							$aspectCollection->add($aspect);
+                            $product = new \Product();
+                            // require_once 'src/Product.php';
+                            ```
+                        </script>
+                    </section>
+                    <section>
+                        <h2>spl_autoload_unregister()</h2>
+                        <p>permite remover uma função já registrada</p>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ```
+                            spl_autoload_unregister(array('MyAutoloader', 'loadClass'));
 
-						    $aspectKernel = ApplicationAspectKernel::getInstance();
-						    $aspectKernel->setAspectCollection($aspectCollection);
-						    $aspectKernel->init(
-						        array(
-						            'debug'     => true,
-						            'cacheDir'  => '/tmp/',
-						            'includePaths' => array(
-						                realpath(dirname(__FILE__) . '/Stub')
-						            )
-						        )
-						    );
+                            $product = new \Product();
+                            // Fatal error: class does not exists
+                            ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        public static function init(
+                            array $options = [],
+                            AspectContainer $container
+                        ) {
+                            $loaders = spl_autoload_functions();
+                            foreach ($loaders as &$loader) {
+                                $loaderToUnregister = $loader;
+                                // ...
+                                $loader[0] = new AopComposerLoader(
+                                    $loader[0],
+                                    $container,
+                                    $options
+                                );
+                                // ...
+                                spl_autoload_unregister($loaderToUnregister);
+                            }
 
-						    // ...
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						/**
-						 * @expectedException Exception
-						 */
-						public function testIfWriteLogWhenExceptionThrown()
-						{
-							// ...
+                            foreach ($loaders as $loader) {
+                                spl_autoload_register($loader);
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```
+                        // cache/src/App/Service/Product.php
 
-						    $exceptionMessage = "An any exception";
+                        namespace App\Service;
 
-						    $logger->expects($this->once())
-						        ->method('error')
-						        ->with($exceptionMessage);
+                        class Product__AopProxied
+                        {
+                            public function createNewProduct($productName, $price)
+                            {
+                                $product = new Product();
+                                $product->setName($productName);
+                                $product->setPrice($price);
 
-						    $stub = new ClassThatThrowsExceptionStub();
-						    $stub->throwException($exceptionMessage);
-						}
-						```
-						</script>
-					</section>
-				</section>
-				<section>
-					<section>
-                        <img width="300px" src="http://s2.glbimg.com/hdsIFDj3oY1EOCyne6Rmp-DpkllTGU1qGUChAN4ZPGqfaJZ1u3YDTeCDtm-NeEfI/i.glbimg.com/og/ig/f/original/2013/07/12/misterm2.jpg">
-                        <h2>desvendando a mágica por trás do Go! Aop...</h2>
-					</section>
-					<section>
-						<h2>o pattern <span class="highlight">proxy</span></h2>
-						<p>é um padrão estrutural que nos permite encapsular um objeto através de um outro objeto que possui a mesma interface, de forma que o <span class="highlight">segundo objeto  controle o acesso ao primeiro, que é o objeto real.</span></p>
-					</section>
-					<section>
-						<img width="800px" src="proxy.png">
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						final class BeforeInterceptor 
-							extends BaseInterceptor 
-							implements AdviceBefore
-						{
-						    public function invoke(Joinpoint $joinpoint)
-						    {
-						        $adviceMethod = $this->adviceMethod;
-						        $adviceMethod($joinpoint);
+                                $this->entityManager->persist($product);
+                            }
+                        }
 
-						        return $joinpoint->proceed();
-						    }
-						}
-						```
-						</script>
-					</section>	
-					<section data-markdown>
-						<script type="text/template">
-						```
-						final class AfterInterceptor extends BaseInterceptor implements AdviceAfter
-						{
-						    public function invoke(Joinpoint $joinpoint)
-						    {
-						        try {
-						            $result = $joinpoint->proceed();
-						        } finally {
-						            $adviceMethod = $this->adviceMethod;
-						            $adviceMethod($joinpoint);
-						        }
+                        include_once AOP_CACHE_DIR
+                            . '/_proxies/src/App/Servcice/Product.php';
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```
+                        // cache/_proxyes/src/App/Service/Product.php
 
-						        return $result;
-						    }
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						final class AfterThrowingInterceptor extends BaseInterceptor implements AdviceAfter
-						{
-						    public function invoke(Joinpoint $joinpoint)
-						    {
-						        try {
-						            $result = $joinpoint->proceed();
-						        } catch (Exception $invocationException) {
-						            $adviceMethod = $this->adviceMethod;
-						            $adviceMethod($joinpoint, $invocationException);
+                        namespace App\Service;
 
-						            throw $invocationException;
-						        }
+                        class Product
+                            extends Product__AopProxied
+                            implements \Go\Aop\Proxy
+                        {
+                            private static $__joinPoints = [];
 
-						        return $result;
-						    }
-						}
-						```
-						</script>
-					</section>
-					<section>
-						<h2>spl_autoload_register()</h2>
-						<p>permite registrar uma função responsável por carregar classes e interfaces automaticamente</p>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							```
-							spl_autoload_register(function($className) {
-								require_once 'src/' . $className . 'php';
-							});
+                            public function createNewProduct($productName, $price)
+                            {
+                                return self::$__joinPoints['method:createNewProduct']
+                                    ->__invoke($this, [$productName, $price]);
+                            }
 
-							$product = new \Product();
-							// require_once 'src/Product.php';
-							```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							```
-							class MyAutoloader 
-							{
-								public function loadClass($className)
-								{
-									require_once 'src/' . $className . 'php';
-								}
-							}
+                        }
+                        // ...
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```
+                        final class BeforeInterceptor
+                            extends BaseInterceptor
+                            implements AdviceBefore
+                        {
+                            public function invoke(Joinpoint $joinpoint)
+                            {
+                                $adviceMethod = $this->adviceMethod;
+                                $adviceMethod($joinpoint);
 
-							spl_autoload_register(array('MyAutoloader', 'loadClass'));
+                                return $joinpoint->proceed();
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```
+                        final class AfterInterceptor
+                            extends BaseInterceptor
+                            implements AdviceAfter
+                        {
+                            public function invoke(Joinpoint $joinpoint)
+                            {
+                                try {
+                                    $result = $joinpoint->proceed();
+                                } finally {
+                                    $adviceMethod = $this->adviceMethod;
+                                    $adviceMethod($joinpoint);
+                                }
 
-							$product = new \Product();
-							// require_once 'src/Product.php';
-							```
-						</script>
-					</section>					
-					<section>
-						<h2>spl_autoload_unregister()</h2>
-						<p>permite remover uma função já registrada</p>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							```
-							spl_autoload_unregister(array('MyAutoloader', 'loadClass'));
+                                return $result;
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```
+                        final class AfterThrowingInterceptor
+                            extends BaseInterceptor
+                            implements AdviceAfter
+                        {
+                            public function invoke(Joinpoint $joinpoint)
+                            {
+                                try {
+                                    $result = $joinpoint->proceed();
+                                } catch (Exception $invocationException) {
+                                    $adviceMethod = $this->adviceMethod;
+                                    $adviceMethod($joinpoint, $invocationException);
 
-							$product = new \Product();
-							// Fatal error: class does not exists
-							```
-						</script>
-					</section>								
-					<section data-markdown>
-						<script type="text/template">
-						```php
-						public static function init(array $options = [], AspectContainer $container)
-						{
-							$loaders = spl_autoload_functions();
-							foreach ($loaders as &$loader) {
-							    $loaderToUnregister = $loader;
-							    if (is_array($loader) 
-							    	&& ($loader[0] instanceof ClassLoader)) {
-							        $originalLoader = $loader[0];
-		
-									// ...
+                                    throw $invocationException;
+                                }
 
-							        $loader[0] = new AopComposerLoader(
-							        	$loader[0], $container, $options);
-							        self::$wasInitialized = true;
-							    }
-							    spl_autoload_unregister($loaderToUnregister);
-							}
-							unset($loader);
-							foreach ($loaders as $loader) {
-							    spl_autoload_register($loader);
-							}
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						public function loadClass($class)
-						{
-						    $file = $this->findFile($class);
-						    if ($file) {
-						        include $file;
-						    }
-						}
-						```
-						</script>
-					</section>					
-					<section data-markdown>
-						<script type="text/template">
-						```
-						public function findFile($class)
-						{
-							static $isAllowedFilter = null, $isProduction = false;
-							if (!$isAllowedFilter) {
-							    $isAllowedFilter = $this->fileEnumerator->getFilter();
-							    $isProduction    = !$this->options['debug'];
-							}
-							$file = $this->original->findFile($class);
-							if ($file) {
-							    $file = PathResolver::realpath($file)?:$file;
-							    $cacheState = isset($this->cacheState[$file]) 
-							    	? $this->cacheState[$file] : null;
-							    if ($cacheState && $isProduction) {
-							        $file = $cacheState['cacheUri'] ?: $file;
-							    } elseif ($isAllowedFilter(new \SplFileInfo($file))) {
-							        $file = FilterInjectorTransformer::rewrite($file);
-							    }
-							}
-							return $file;
-						}
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						// cache/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+                                return $result;
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Go! Aop e PHPUnit</h2>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        // tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
 
-						namespace Aop\Aspect\Stub;
+                        namespace App\Aspect\Stub;
 
-						use Exception;
+                        class ClassThatThrowsExceptionStub
+                        {
+                            public function throwException($message)
+                            {
+                                throw new \Exception($message);
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        /**
+                         * @expectedException Exception
+                         */
+                        public function testIfWriteLogWhenExceptionThrown()
+                        {
+                            $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+                                ->getMock();
 
-						class ClassThatThrowsExceptionStub__AopProxied
-						{
-						    public function throwException($message)
-						    {
-						        throw new Exception($message);
-						    }
-						}
+                            $aspect = new ExceptionLoggerAspect();
+                            $aspect->withLogger($logger);
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        /**
+                         * @expectedException Exception
+                         */
+                        public function testIfWriteLogWhenExceptionThrown()
+                        {
+                            // ...
 
-						include_once AOP_CACHE_DIR 
-							. '/_proxies/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php';
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						// cache/_proxyes/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+                            $aspectCollection = new AspectCollection();
+                            $aspectCollection->add($aspect);
 
-						namespace Aop\Aspect\Stub;
+                            $aspectKernel = ApplicationAspectKernel::getInstance();
+                            $aspectKernel->setAspectCollection($aspectCollection);
+                            $aspectKernel->init(
+                                array(
+                                    'debug'     => true,
+                                    'cacheDir'  => '/tmp/',
+                                    'includePaths' => array(
+                                        realpath(dirname(__FILE__) . '/Stub')
+                                    )
+                                )
+                            );
 
-						use Exception as Exception;
+                            // ...
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        /**
+                         * @expectedException Exception
+                         */
+                        public function testIfWriteLogWhenExceptionThrown()
+                        {
+                            // ...
 
-						class ClassThatThrowsExceptionStub 
-							extends ClassThatThrowsExceptionStub__AopProxied 
-							implements \Go\Aop\Proxy
-						{
-						    private static $__joinPoints = [];
-						    
-						    public function throwException($message)
-						    {
-						        return self::$__joinPoints['method:throwException']
-						            ->__invoke($this, [$message]);
-						    }
-						    
-						}
-						// ...
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						// cache/_proxyes/tests/Aspect/Stub/ClassThatThrowsExceptionStub.php
+                            $exceptionMessage = "An any exception";
 
-						namespace Aop\Aspect\Stub;
+                            $logger->expects($this->once())
+                                ->method('error')
+                                ->with($exceptionMessage);
 
-						use Exception as Exception;
+                            $stub = new ClassThatThrowsExceptionStub();
+                            $stub->throwException($exceptionMessage);
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        /**
+                         * @expectedException Exception
+                         */
+                        public function testIfWriteLogWhenExceptionThrown()
+                        {
+                            // ...
 
-						class ClassThatThrowsExceptionStub 
-							extends ClassThatThrowsExceptionStub__AopProxied 
-							implements \Go\Aop\Proxy
-						{
-							// ...						    
-						}
-						\Go\Proxy\ClassProxy::injectJoinPoints('Aop\Aspect\Stub\ClassThatThrowsExceptionStub',array (
-						  'method' => 
-						  array (
-						    'throwException' => 
-						    array (
-						      0 => 'advisor.Aop\\Aspect\\ExceptionLoggerAspect->writeExceptionLog',
-						    ),
-						  ),
-						));
-						```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						```
-						// ...
-						class ClassProxy extends AbstractProxy
-						{
-							// ...
-						    public static function injectJoinPoints($className, array $advices = [])
-						    {
-						        $reflectionClass  = new ReflectionClass($className);
-						        $joinPoints       = static::wrapWithJoinPoints(
-						        	$advices, 
-						        	$reflectionClass->getParentClass()->name
-						        );
+                            $exceptionMessage = "An any exception";
 
-						        $prop = $reflectionClass->getProperty('__joinPoints');
-						        $prop->setAccessible(true);
-						        $prop->setValue($joinPoints);
+                            $logger->expects($this->once())
+                                ->method('error')
+                                ->with($exceptionMessage);
 
-						        // ...
-						    }
-						    // ...
-						}
-						```
-						</script>
-					</section>
-				</section>
-				<section>
-					<section>					
-						<h2>referencias:</h2>
-						<p>Doc oficial - <a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
-						<p>Exemplos de uso - <a href="https://github.com/ricardotulio/AspectOrientedProgramming/">https://github.com/ricardotulio/AspectOrientedProgramming/</a></p>
-					</section>
-					<section>					
-						<h2>bibliografia:</h2>
-						<p><a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
-						<p><a href="http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos">http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos</a></p>
-						<p><a href="http://php.net/manual/pt_BR/function.spl-autoload-register.php">http://php.net/manual/pt_BR/function.spl-autoload-register.php</a></p>
-						<p><a href="http://php.net/manual/pt_BR/function.spl-autoload-unregister.php">http://php.net/manual/pt_BR/function.spl-autoload-unregister.php</a></p>
-					</section>					
-					<section>
-						<div style="float: left; width: 50%">
-							<img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
-						</div>
-						<div style="float: left; width: 50%">
-							<p>Ricardo Ledo de Tulio</p>
-							<p><b>@ricardotulio</b></p>
-							<p>Desenvolvedor PHP na</p>
-							<img src="https://dashboard.pagar.me/images/reduced-logo.png">
-						</div>
-					</section>
-				</section>
-			</div>
-		</div>
+                            $stub = new ClassThatThrowsExceptionStub();
+                            $stub->throwException($exceptionMessage);
+                        }
+                        ```
+                        </script>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>referencias:</h2>
+                        <p>Doc oficial - <a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
+                        <p>Exemplos de uso - <a href="https://github.com/ricardotulio/AspectOrientedProgramming/">https://github.com/ricardotulio/AspectOrientedProgramming/</a></p>
+                    </section>
+                    <section>
+                        <h2>bibliografia:</h2>
+                        <p><a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
+                        <p><a href="http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos">http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos</a></p>
+                        <p><a href="http://php.net/manual/pt_BR/function.spl-autoload-register.php">http://php.net/manual/pt_BR/function.spl-autoload-register.php</a></p>
+                        <p><a href="http://php.net/manual/pt_BR/function.spl-autoload-unregister.php">http://php.net/manual/pt_BR/function.spl-autoload-unregister.php</a></p>
+                    </section>
+                    <section>
+                        <div style="float: left; width: 50%">
+                            <img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
+                        </div>
+                        <div style="float: left; width: 50%">
+                            <p>Ricardo Ledo de Tulio</p>
+                            <p><b>@ricardotulio</b></p>
+                            <p>Desenvolvedor PHP na</p>
+                            <img src="https://dashboard.pagar.me/images/reduced-logo.png">
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
 
-		<script>
-			// More info https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				history: true,
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                history: true,
 
-				// More info https://github.com/hakimel/reveal.js#dependencies
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-		<style type="text/css">
-			h2, h3, h4, h5 {
-				text-transform: none !important;
-			}
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+        <style type="text/css">
+            h2, h3, h4, h5 {
+                text-transform: none !important;
+            }
 
-			.highlight {
-				font-style: italic !important;
-				color: #36c !important;
-			}
+            .highlight {
+                font-style: italic !important;
+                color: #36c !important;
+            }
 
-			code {
-				max-height: 1000px !important;
-			}
-		</style>
-	</body>
+            code {
+                max-height: 1000px !important;
+            }
+        </style>
+    </body>
 </html>
 
 
