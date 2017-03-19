@@ -22,7 +22,6 @@ use Monolog\Logger;
  */
 final class ApplicationAspectKernel extends AspectKernel
 {
-
     /**
      *
      * @var \Aop\Aspect\AspectCollectionInterface
