@@ -196,7 +196,7 @@
                                 $this->entityManager->beginTransaction();
                                 // faz alguma coisa...
                                 $this->entityManager->commit();
-                            catch(\PDOException $e) {
+                            } catch(\PDOException $e) {
                                 $this->entityManager->rollBack();
                                 throw $e;
                             }
@@ -420,7 +420,7 @@
                             // ...
 
                             /**
-                             * @AfterThrow("execution(public **->*(*))")
+                             * @AfterThrow("@execution(Annotation\Transactionl)")
                              */
                             public function commitTransaction(MethodInvocation $invocation)
                             {
@@ -605,7 +605,7 @@
                     <section data-markdown>
                         <script type="text/template">
                         ```
-                        // cache/_proxyes/src/App/Service/Product.php
+                        // cache/_proxies/src/App/Service/Product.php
 
                         namespace App\Service;
 
@@ -803,6 +803,120 @@
                         ```
                         </script>
                     </section>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## ferramentas que utilizam programação orientada a aspectos
+
+                            - Doctrine
+                            - Symphony
+                            - PHPUnit
+                            - Behat
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            Doctrine
+                            ```php
+                            /** 
+                             * @Entity 
+                             */
+                            class User
+                            {
+                                // ...
+
+                                /**
+                                 * @ManyToOne(targetEntity="Address")
+                                 * @JoinColumn(
+                                 *   name="address_id", 
+                                 *   referencedColumnName="id"
+                                 * )
+                                 */
+                                 private $address;
+                            }
+                            ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        Symfony
+                        ```
+                        // src/AppBundle/Controller/BlogController.php
+                        namespace AppBundle\Controller;
+
+                        use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+                        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+                        class BlogController extends Controller
+                        {
+                            /**
+                             * @Route("/blog/{slug}", name="blog_show")
+                             */
+                            public function showAction($slug)
+                            {
+                                // ...
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        PHPUnit
+                        ```php
+                        class ExceptionTest extends PHPUnit_Framework_TestCase
+                        {
+                            /**
+                             * @expectedException InvalidArgumentException
+                             */
+                            public function testException()
+                            {
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        Behat
+                        ```
+                        class FeatureContext
+                        {
+                            /**
+                             * @Given a username :username
+                             */
+                            public function aUsername($username)
+                            {
+                                // ...
+                            }
+
+                            /**
+                             * @When access bank account
+                             */
+                            public function accessBankAccount()
+                            {
+                                // ...
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                    ## outras ferramentas 
+
+                    - ray/aop (install: 39.677, deps: 5)
+                    - ytake/laravel-aspect (install: 5.392, deps: 0)
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                    ## trade offs
+
+                    - dificuldade em debugar a aplicação
+                    </script>
                 </section>
                 <section>
                     <section>
