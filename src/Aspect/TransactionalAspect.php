@@ -27,7 +27,7 @@ final class TransactionalAspect
      * @return \Doctrine\DBAL\Connection
      * @codeCoverageIgnore
      */
-    public function getConnection(): Connection
+    public function getConnection(): ?Connection
     {
         return $this->connection;
     }
