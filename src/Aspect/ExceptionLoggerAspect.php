@@ -13,12 +13,11 @@ use Psr\Log\LoggerInterface;
  * @package  Aop\Aspect
  * @author   Ricardo Ledo de Tulio <ledo.tulio@gmail.com>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL 3.0
- * @link     https://github.com/ricardotulio/Aop
+ * @link     https://github.com/ricardotulio/AspectOrientedProgramming
  */
 final class ExceptionLoggerAspect implements Aspect
 {
     /**
-     *
      * @var \Psr\Log\LoggerInterface $logger
      */
     private $logger;
@@ -51,8 +50,7 @@ final class ExceptionLoggerAspect implements Aspect
      * Capture and log exceptions
      *
      * @param \Go\Aop\Intercept\MethodInvocation
-     *
-     * @return null
+     * @return void
      *
      * @AfterThrowing("execution(public **->*(*))")
      */
