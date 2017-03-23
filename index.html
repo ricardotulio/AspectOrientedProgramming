@@ -39,7 +39,7 @@
                         <p>Ricardo Ledo de Tulio</p>
                         <p><b>@ricardotulio</b></p>
                         <p>Desenvolvedor PHP na</p>
-                        <img src="https://dashboard.pagar.me/images/reduced-logo.png">
+                        <img style="border: 0px" src="https://dashboard.pagar.me/images/reduced-logo.png">
                     </div>
                 </section>
                 <section>
@@ -88,6 +88,26 @@
                         ```php
                         public function createNewProduct($productName, $price)
                         {
+                            $product = new Product();
+                            $product->setName($productName);
+                            $product->setPrice($price);
+
+                            try {
+                                $this->entityManager->beginTransaction();
+                                $this->entityManager->persist($product);
+                                $this->entityManager->commit();
+                            } catch(\PDOException $e) {
+                                $this->entityManager->rollBack();
+                            }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ```php
+                        public function createNewProduct($productName, $price)
+                        {
                             try {
                                 $product = new Product();
                                 $product->setName($productName);
@@ -97,12 +117,16 @@
                                 $this->entityManager->persist($product);
                                 $this->entityManager->commit();
                             } catch(PDOException $e) {
+                                $this->entityManager->rollBack();
                                 $this->log->error($e->getMessage());
                                 throw $e;
                             }
                         }
                         ```
                         </script>
+                    </section>
+                    <section>
+                        <img src="http://cdn.playbuzz.com/cdn/736a5067-4365-4029-80be-f9744402b9eb/5fef15f4-ce51-47e9-885e-4c6936fed6e5.gif">
                     </section>
                     <section>
                         <p>é muito comum precisarmos escrever códigos que <span class="highlight">não fazem parte do domínio da aplicação</span>, mas que são essenciais para o seu funcionamento</p>
@@ -118,6 +142,9 @@
                     <section>
                         <h2>aspecto</h2>
                         <p>é aquilo que faz parte da <span class="highlight">aparência ou face exterior de algo ou alguém</span></p>
+                    </section>
+                    <section>
+                        <img src="https://i.ytimg.com/vi/yIBC0ImMII8/hqdefault.jpg">
                     </section>
                     <section>
                         <h2>programação orientada a aspectos é</h2>
@@ -227,7 +254,7 @@
                     <section data-markdown>
                         <script type="text/template">
                         ## instalando o Go! Aop
-                        ```
+                        ``` 
                         $ composer require goaop/framework
                         ```
                         </script>
@@ -388,8 +415,9 @@
                             /**
                              * @Before("@execution(Annotation\Transactional)")
                              */
-                            public function beginTransaction(MethodInvocation $invocation)
-                            {
+                            public function beginTransaction(
+                                MethodInvocation $invocation
+                            ) {
                                 $this->entityManager->beginTransaction();
                             }
 
@@ -486,7 +514,7 @@
                             // ..
                             // try {
                             //    $this->entityManager->beginTransaction();
-                            //    $this->entityManager->persist($product);
+                                $this->entityManager->persist($product);
                             //    $this->entityManager->commit();
                             // } catch(\PDOException $e) {
                             //    $this->entityManager->rollBack();
@@ -795,7 +823,7 @@
                         {
                             // ...
 
-                            $exceptionMessage = "An any exception";
+                            $exceptionMessage = "Any Exception";
 
                             $logger->expects($this->once())
                                 ->method('error')
@@ -809,15 +837,8 @@
                     </section>
                 </section>
                 <section>
-                    <section data-markdown>
-                        <script type="text/template">
-                            ## ferramentas que utilizam programação orientada a aspectos
-
-                            - Doctrine
-                            - Symphony
-                            - PHPUnit
-                            - Behat
-                        </script>
+                    <section>
+                        <h2>ferramentas que fazem uso da programação orientada a aspectos</h2>
                     </section>
                     <section data-markdown>
                         <script type="text/template">
