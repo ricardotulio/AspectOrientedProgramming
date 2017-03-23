@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <title>reveal.js</title>
+        <title>Programação Orientada a Aspectos em PHP</title>
 
         <link rel="stylesheet" href="css/reveal.css">
         <link rel="stylesheet" href="css/theme/black.css">
@@ -28,6 +28,19 @@
                     <p>Programação</p>
                     <h1>Orientada a <i>Aspectos</i></h1>
                     <p>em PHP</p>
+                    <br />
+                    <p>Ricardo Ledo de Tulio</p>
+                </section>
+                <section>
+                    <div style="float: left; width: 50%">
+                        <img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
+                    </div>
+                    <div style="float: left; width: 50%">
+                        <p>Ricardo Ledo de Tulio</p>
+                        <p><b>@ricardotulio</b></p>
+                        <p>Desenvolvedor PHP na</p>
+                        <img src="https://dashboard.pagar.me/images/reduced-logo.png">
+                    </div>
                 </section>
                 <section>
                     <section>
@@ -116,8 +129,7 @@
                             <li>log</li>
                             <li>cache</li>
                             <li>gerenciamento de <i>transactions</i></li>
-                            <li>injeção de dependências</li>
-                            <li>autorização</li>
+                            <li>indexação de dados</li>
                         </ul>
                     </section>
                     <section>
@@ -233,8 +245,9 @@
 
                         final class ApplicationAspectKernel extends AspectKernel
                         {
-                            protected function configureAop(AspectContainer $container)
-                            {}
+                            protected function configureAop(
+                                AspectContainer $container
+                            ) {}
                         }
                         ```
                         </script>
@@ -247,7 +260,7 @@
 
                         use AspectOrientedProgramming\Aspect\ApplicationAspectKernel;
 
-                        require_once '../vendor/autoload.php';
+                        require_once ___DIR__.'/../vendor/autoload.php';
 
                         $aspectKernel = ApplicationAspectKernel::getInstance();
                         $aspectKernel->init(
@@ -268,12 +281,7 @@
                         ```php
                         // src/Aspect/ExceptionLogAspect.php
 
-                        namespace App\Aspect;
-
-                        use Go\Aop\Aspect;
-                        use Go\Lang\Annotation\AfterThrowing;
-                        use Go\Aop\Intercept\MethodInvocation;
-                        use Psr\Log\LoggerInterface;
+                        // ...
 
                         final class ExceptionLoggerAspect implements Aspect
                         {
@@ -401,8 +409,9 @@
                             /**
                              * @After("@execution(Annotation\Transactional)")
                              */
-                            public function commitTransaction(MethodInvocation $invocation)
-                            {
+                            public function commitTransaction(
+                                MethodInvocation $invocation
+                            ) {
                                 $this->entityManager->commit();
                             }
 
@@ -420,12 +429,28 @@
                             // ...
 
                             /**
-                             * @AfterThrow("@execution(Annotation\Transactionl)")
+                             * @AfterThrow("@execution(Annotation\Transactional)")
                              */
-                            public function commitTransaction(MethodInvocation $invocation)
-                            {
+                            public function commitTransaction(
+                                MethodInvocation $invocation
+                            ) {
                                 $this->entityManager->rollBack();
                             }
+                        }
+                        ```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## registrando nosso aspecto
+                        ```php
+                        protected function configureAop(AspectContainer $container)
+                        {
+                            // ...
+
+                            $container->registerAspect(
+                                new TransactionManagerAspect($this->entityManager)
+                            );
                         }
                         ```
                         </script>
@@ -720,8 +745,9 @@
                          */
                         public function testIfWriteLogWhenExceptionThrown()
                         {
-                            $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
-                                ->getMock();
+                            $logger = $this->getMockBuilder(
+                                '\Psr\Log\LoggerInterface'
+                            )->getMock();
 
                             $aspect = new ExceptionLoggerAspect();
                             $aspect->withLogger($logger);
@@ -755,28 +781,6 @@
                             );
 
                             // ...
-                        }
-                        ```
-                        </script>
-                    </section>
-                    <section data-markdown>
-                        <script type="text/template">
-                        ```php
-                        /**
-                         * @expectedException Exception
-                         */
-                        public function testIfWriteLogWhenExceptionThrown()
-                        {
-                            // ...
-
-                            $exceptionMessage = "An any exception";
-
-                            $logger->expects($this->once())
-                                ->method('error')
-                                ->with($exceptionMessage);
-
-                            $stub = new ClassThatThrowsExceptionStub();
-                            $stub->throwException($exceptionMessage);
                         }
                         ```
                         </script>
@@ -916,6 +920,7 @@
                     ## trade offs
 
                     - dificuldade em debugar a aplicação
+                    - os testes se tornam um pouco mais complexos
                     </script>
                 </section>
                 <section>
@@ -926,21 +931,12 @@
                     </section>
                     <section>
                         <h2>bibliografia:</h2>
-                        <p><a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></p>
-                        <p><a href="http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos">http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos</a></p>
-                        <p><a href="http://php.net/manual/pt_BR/function.spl-autoload-register.php">http://php.net/manual/pt_BR/function.spl-autoload-register.php</a></p>
-                        <p><a href="http://php.net/manual/pt_BR/function.spl-autoload-unregister.php">http://php.net/manual/pt_BR/function.spl-autoload-unregister.php</a></p>
-                    </section>
-                    <section>
-                        <div style="float: left; width: 50%">
-                            <img src="https://avatars1.githubusercontent.com/u/5113666?v=3&s=460">
-                        </div>
-                        <div style="float: left; width: 50%">
-                            <p>Ricardo Ledo de Tulio</p>
-                            <p><b>@ricardotulio</b></p>
-                            <p>Desenvolvedor PHP na</p>
-                            <img src="https://dashboard.pagar.me/images/reduced-logo.png">
-                        </div>
+                        <ul>
+                            <li><a href="http://go.aopphp.com/docs/">http://go.aopphp.com/docs/</a></li>
+                            <li><a href="http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos">http://pt.stackoverflow.com/questions/20837/o-que-%C3%A9-programa%C3%A7%C3%A3o-orientada-a-aspectos</a></li>
+                            <li><a href="http://php.net/manual/pt_BR/function.spl-autoload-register.php">http://php.net/manual/pt_BR/function.spl-autoload-register.php</a></li>
+                            <li><a href="http://php.net/manual/pt_BR/function.spl-autoload-unregister.php">http://php.net/manual/pt_BR/function.spl-autoload-unregister.php</a></li>
+                        </ul>
                     </section>
                 </section>
             </div>
