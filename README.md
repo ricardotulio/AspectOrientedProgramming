@@ -1,5 +1,7 @@
 # PHPAspect
 
+[![Build Status](https://travis-ci.org/ricardotulio/AspectOrientedProgramming.svg?branch=master)](https://travis-ci.org/ricardotulio/AspectOrientedProgramming) [![Coverage Status](https://coveralls.io/repos/github/ricardotulio/AspectOrientedProgramming/badge.svg?branch=master)](https://coveralls.io/github/ricardotulio/AspectOrientedProgramming?branch=master) [![Code Climate](https://codeclimate.com/github/ricardotulio/AspectOrientedProgramming/badges/gpa.svg)](https://codeclimate.com/github/ricardotulio/AspectOrientedProgramming)
+
 PHPAspect é um tutorial de como utilizar [**AOP (Aspect Oriented Programming ou Programação Orientada à Aspecto)**](https://pt.wikipedia.org/wiki/Programa%C3%A7%C3%A3o_orientada_a_aspecto) em PHP. Ele possui uma implementação simples de um provilador que registra o tempo de execução de todos os métodos da aplicação.
 
 
